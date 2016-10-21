@@ -42,6 +42,7 @@ import org.snmp4j.transport.TransportMappings;
 public class SNMPAgent extends BaseAgent {
 
     private String address;
+    private boolean mibInitialized = false;
 
     /**
      *
@@ -50,7 +51,10 @@ public class SNMPAgent extends BaseAgent {
      */
 
     private Simulator sim;
-    private MOScalar speed;
+
+    private MOScalar evBrandModel, evVIN,  evMaxPower, evSpeed, evLocation, evKM;
+    private MOScalar motorDescription, motorRPM, motorMaxPower;
+    private MOScalar btryCapacity, btryModuleCount;
 
     public SNMPAgent(String address, Simulator sim) throws IOException {
 
@@ -185,24 +189,78 @@ public class SNMPAgent extends BaseAgent {
 
     private void initializeMIB() {
 
-        OID sysDescr = new OID(".1.3.6.1.2.1.1.1.0");
-        OID speedOID = new OID(".1.3.6.1.2.1.1.99.0");
+        //OID sysDescr = new OID(".1.3.6.1.2.1.1.1.0");
+        //this.unregisterManagedObject(this.getSnmpv2MIB());
+        //this.registerManagedObject(MOCreator.createReadOnly(sysDescr,"EH NOIS Q VOA BRUSHAUM"));
 
-        this.unregisterManagedObject(this.getSnmpv2MIB());
+        //Inicializa OIDs de acordo com a MIB
+        OID evBrandModelOID = new OID(".1.3.6.1.4.1.12619.5.1.0");
+        OID evVINOID = new OID(".1.3.6.1.4.1.12619.5.2.0");
+        OID evMaxPowerOID = new OID(".1.3.6.1.4.1.12619.5.3.0");
+        OID evSpeedOID = new OID(".1.3.6.1.4.1.12619.5.4.0");
+        OID evLocationOID = new OID(".1.3.6.1.4.1.12619.5.5.0");
+        OID evKMOid = new OID(".1.3.6.1.4.1.12619.5.6.0");
 
-        speed = MOCreator.createReadOnly(speedOID, "0");
+        OID motorDescriptionOID = new OID(".1.3.6.1.4.1.12619.5.8.1.0");
+        OID motorRPMOID = new OID(".1.3.6.1.4.1.12619.5.8.2.0");
+        OID motorMaxPowerOID = new OID(".1.3.6.1.4.1.12619.5.8.3.0");
 
-        this.registerManagedObject(MOCreator.createReadOnly(sysDescr,"EH NOIS Q VOA BRUSHAUM"));
-        this.registerManagedObject(speed);
+        OID btryCapacityOID = new OID(".1.3.6.1.4.1.12619.5.9.1.0");
+        OID btryModuleCountOID = new OID(".1.3.6.1.4.1.12619.5.9.2.0");
 
+        //Inicializa Objetos da MIB
+        evBrandModel = MOCreator.createReadOnly(evBrandModelOID, "Tesla Model Bruxao S");
+        this.registerManagedObject(evBrandModel);
+
+        evVIN = MOCreator.createReadOnly(evVINOID, "1234567890");
+        this.registerManagedObject(evVIN);
+
+        evMaxPower = MOCreator.createReadOnly(evMaxPowerOID, "1000");
+        this.registerManagedObject(evMaxPower);
+
+        evSpeed = MOCreator.createReadOnly(evSpeedOID, 0.0f);
+        this.registerManagedObject(evSpeed);
+
+        evLocation = MOCreator.createReadOnly(evLocationOID, "(0,0)");
+        this.registerManagedObject(evLocation);
+
+        evKM = MOCreator.createReadOnly(evKMOid, "0");
+        this.registerManagedObject(evKM);
+
+
+        motorDescription = MOCreator.createReadOnly(motorDescriptionOID, "Sem duvida eh um motor eletrico");
+        this.registerManagedObject(motorDescription);
+
+        motorRPM = MOCreator.createReadOnly(motorRPMOID, 0.0f);
+        this.registerManagedObject(motorRPM);
+
+        motorMaxPower = MOCreator.createReadOnly(motorMaxPowerOID, 1500);
+        this.registerManagedObject(motorMaxPower);
+
+
+        btryCapacity = MOCreator.createReadOnly(btryCapacityOID, 9001);
+        this.registerManagedObject(btryCapacity);
+
+        btryModuleCount = MOCreator.createReadOnly(btryModuleCountOID, 4);
+        this.registerManagedObject(btryModuleCount);
+
+        mibInitialized = true;
     }
 
     public void updateData() {
-        Float fSpeed = sim.getCar().getCurrentSpeedKmh();
 
-        if(fSpeed != null && speed != null) {
-            speed.setValue(new OctetString(fSpeed.toString()));
-        }
+        if(!mibInitialized)
+            return;
+
+        Float fSpeed = sim.getCar().getCurrentSpeedKmh();
+        evSpeed.setValue(new Gauge32(fSpeed.longValue()));
+
+        Float fRPM = sim.getCar().getTransmission().getRPM();
+        motorRPM.setValue(new Gauge32(fRPM.longValue()));
+
+        Float fMileage = sim.getCar().getMileage() / 1000.0f;
+        evKM.setValue(new OctetString(fMileage.toString()));
+
 
     }
 

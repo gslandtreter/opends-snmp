@@ -453,22 +453,14 @@ public class Simulator extends SimulationBasics
 
 		// Inicializa o SNMP
 		/////////////////////////////////////////
-
 		try {
-
-
-
 			snmpAgent = new SNMPAgent("0.0.0.0/2001", this);
 			snmpAgent.start();
-
-
-
 		}
 		catch(Exception e) {
 			//TODO: Catch me
-			System.out.println("ERROR!!!" + e);
+			e.printStackTrace();
 		}
-
 		/////////////////////////////////////////
 		
 		StatsAppState statsAppState = stateManager.getState(StatsAppState.class);
@@ -611,8 +603,8 @@ public class Simulator extends SimulationBasics
     		
     		updateCoordinateSystem();
 
+			//////////////////////////////////
             //Atualiza os dados do agente SNMP
-            //////////////////////////////////
 
             snmpAgent.updateData();
             //////////////////////////////////

@@ -6,9 +6,7 @@ package eu.opends.snmp;
 
 import org.snmp4j.agent.mo.MOAccessImpl;
 import org.snmp4j.agent.mo.MOScalar;
-import org.snmp4j.smi.OID;
-import org.snmp4j.smi.OctetString;
-import org.snmp4j.smi.Variable;
+import org.snmp4j.smi.*;
 
 /**
  * This class creates and returns ManagedObjects
@@ -25,6 +23,15 @@ public class MOCreator {
     private static Variable getVariable(Object value) {
         if(value instanceof String) {
             return new OctetString((String)value);
+        }
+        else if(value instanceof Float) {
+            return new Gauge32(((Float)value).longValue());
+        }
+        else if (value instanceof Long) {
+            return new Gauge32((Long) value);
+        }
+        else if (value instanceof Integer) {
+            return new Integer32((Integer) value);
         }
         throw new IllegalArgumentException("Unmanaged Type: " + value.getClass());
     }

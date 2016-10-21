@@ -1,0 +1,59 @@
+Manifest-Version: 1.0
+Class-Path: lwjgl-2.9.3.jar denseC64-0.27.jar ffjoystick.jar jogl-all-
+ 2.3.1-natives-solaris-amd64.jar gluegen-rt-main-2.3.1.jar jogl-all-ma
+ in-2.3.1.jar simphynity.jar jme3-niftygui-3.0.jar tvpt.jar jogl-all-2
+ .3.1-natives-windows-amd64.jar commons-beanutils-1.8.0.jar jaxen-1.1.
+ 1.jar jbullet.jar snmp4j-2.5.2.jar lwjgl-platform-2.9.3-natives-osx.j
+ ar xml-apis-ext.jar batik-svg-dom.jar xml-apis.jar jogl-all-2.3.1-nat
+ ives-macosx-universal.jar batik-anim.jar proguard.jar jogl-all-2.3.1-
+ natives-linux-i586.jar jme3-plugins-3.1.0-alpha1.jar jinput-platform-
+ 2.0.5-natives-linux.jar jasperreports-4.1.3.jar batik-awt-util.jar jo
+ gl-all-2.3.1-natives-linux-armv6hf.jar java_websocket.jar jme3-terrai
+ n-3.1.0-alpha1.jar commons-digester-1.7.jar jme3-jogl-3.1.0-alpha1.ja
+ r gluegen-rt-2.3.1-natives-windows-i586.jar groovy-all-1.7.5.jar joal
+ -2.3.1.jar batik-parser.jar joal-2.3.1-natives-linux-amd64.jar jasper
+ reports-chart-themes-4.1.3.jar jcommon-1.0.15.jar jglfont-core_1.3.ja
+ r KAPcomConnector.jar joal-2.3.1-natives-linux-armv6hf.jar saaj-api-1
+ .3.jar jackson-mapper-lgpl-1.7.4.jar spring-beans-2.5.5.jar commons-c
+ odec-1.4.jar castor-1.2.jar iText-2.1.7.jar joal-main-2.3.1.jar hsqld
+ b-1.8.0-10.jar xalan-2.7.1.jar jfx-1.dev.47488-09-06_144536-2.jar joa
+ l-2.3.1-natives-solaris-amd64.jar xbean.jar SteeringDeviationTheme.ja
+ r mysql-connector-java-5.1.18-bin.jar jme3-ios-3.1.0-alpha1.jar jme3-
+ desktop-3.1.0-alpha1.jar jackson-core-lgpl-1.7.4.jar barcode4j-2.0.ja
+ r snmp4j-agent-2.5.3.jar j-ogg-all-1.0.0.jar gluegen-rt-2.3.1-natives
+ -linux-i586.jar dense64-0.27.jar jdom.jar jsr305-2.0.2.jar jme3-jogg-
+ 3.1.0-alpha1.jar batik-xml.jar core-0.27.jar batik-gvt.jar bsh-2.0b4.
+ jar joal-2.3.1-natives-macosx-universal.jar antlr-2.7.5.jar poi-3.7-2
+ 0101029.jar spring-core-2.5.5.jar snmp4j-smi.jar retrace.jar jme3-jbu
+ llet-3.1.0-alpha1.jar NetMessageProtocol.jar gluegen-rt-2.3.1-natives
+ -linux-armv6hf.jar jogl-all-2.3.1-natives-linux-armv6.jar stack-alloc
+ .jar simple-0.27.jar batik-script.jar com.springsource.org.jaxen-1.1.
+ 1.jar commons-collections-2.1.1.jar nifty-1.3.3.jar barbecue-1.5-beta
+ 1.jar eventbus.jar oculus.jar jinput-platform-2.0.5-natives-osx.jar a
+ nt-1.7.1.jar servlet.jar gluegen-rt-2.3.1.jar gluegen-rt-2.3.1-native
+ s-solaris-amd64.jar jpa.jar jme3-effects-3.1.0-alpha1.jar jxl-2.6.10.
+ jar joal-2.3.1-natives-solaris-i586.jar contre.jar jaxen.jar jme3-net
+ working-3.1.0-alpha1.jar gluegen-rt-2.3.1-natives-macosx-universal.ja
+ r jme3-lwjgl-3.1.0-alpha1.jar poi-ooxml-schemas-3.7-20101029.jar bati
+ k-ext.jar nifty-default-controls-1.3.3.jar joal-2.3.1-natives-windows
+ -amd64.jar jutils-1.0.0.jar jovr-0.3.2.2.jar jme3-android-3.1.0-alpha
+ 1.jar commons-javaflow-20060411.jar jna-4.1.0.jar batik-svggen.jar gl
+ uegen-rt-2.3.1-natives-linux-amd64.jar jogl-all-2.3.1-natives-windows
+ -i586.jar vecmath-1.3.1.jar lwjgl-platform-2.9.3-natives-linux.jar ba
+ tik-dom.jar gluegen-rt-2.3.1-natives-linux-armv6.jar CarOntology.jar 
+ xmlpull-xpp3.jar Jama-1.0.3.jar nifty-style-black-1.3.3.jar serialize
+ r.jar jogl-all-2.3.1-natives-linux-amd64.jar commons-logging-1.0.4.ja
+ r png-encoder-1.5.jar gluegen-rt-2.3.1-natives-windows-amd64.jar bati
+ k-bridge.jar batik-util.jar jogl-all-2.3.1.jar hibernate3.jar gluegen
+ -rt-2.3.1-natives-solaris-i586.jar eyetracker.jar jdt-compiler-3.1.1.
+ jar bcel-5.2.jar jinput-platform-2.0.5-natives-windows.jar jme3-blend
+ er-3.1.0-alpha1.jar poi-ooxml-3.7-20101029.jar jaxdomBundle.jar jme3-
+ core-3.1.0-alpha1.jar jme3-android-native-3.1.0-alpha1.jar com.spring
+ source.org.jdom-1.1.0.jar log4j-1.2.15.jar joal-2.3.1-natives-windows
+ -i586.jar velocity-1.7-dep.jar batik-css.jar joal-2.3.1-natives-linux
+ -armv6.jar joal-2.3.1-natives-linux-i586.jar dom4j-1.6.1.jar jfreecha
+ rt-1.0.12.jar jinput-2.0.5.jar mondrian-3.1.1.12687.jar lwjgl-platfor
+ m-2.9.3-natives-windows.jar jogl-all-2.3.1-natives-solaris-i586.jar j
+ 2ee-1.4.jar
+Main-Class: eu.opends.main.Simulator
+
