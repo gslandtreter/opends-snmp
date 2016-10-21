@@ -29,6 +29,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.LinkedList;
 import java.util.List;
 
+import eu.opends.snmp.MOCreator;
+import eu.opends.snmp.SNMPAgent;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
@@ -79,6 +81,7 @@ import eu.opends.traffic.PhysicalTraffic;
 import eu.opends.trigger.TriggerCenter;
 import eu.opends.visualization.LightningClient;
 import eu.opends.visualization.MoviePlayer;
+import org.snmp4j.smi.OID;
 
 /**
  * 
@@ -153,6 +156,9 @@ public class Simulator extends SimulationBasics
 	{
 		return resetPositionList;
 	}
+
+	private SNMPAgent snmpAgent = null;
+	public SNMPAgent getSnmpAgent() { return snmpAgent; }
 
 	private boolean showStats = false;	
 	public void showStats(boolean show)
@@ -444,6 +450,26 @@ public class Simulator extends SimulationBasics
 			settingsControllerServer = new SettingsControllerServer(this);
 			settingsControllerServer.start();
 		}
+
+		// Inicializa o SNMP
+		/////////////////////////////////////////
+
+		try {
+
+
+
+			snmpAgent = new SNMPAgent("0.0.0.0/2001", this);
+			snmpAgent.start();
+
+
+
+		}
+		catch(Exception e) {
+			//TODO: Catch me
+			System.out.println("ERROR!!!" + e);
+		}
+
+		/////////////////////////////////////////
 		
 		StatsAppState statsAppState = stateManager.getState(StatsAppState.class);
     	if (statsAppState != null && statsAppState.getFpsText() != null && statsAppState.getStatsView() != null) 
@@ -584,6 +610,12 @@ public class Simulator extends SimulationBasics
     		joystickSpringController.update(tpf);
     		
     		updateCoordinateSystem();
+
+            //Atualiza os dados do agente SNMP
+            //////////////////////////////////
+
+            snmpAgent.updateData();
+            //////////////////////////////////
     	}
     }
 

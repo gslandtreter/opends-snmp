@@ -23,6 +23,7 @@ import org.snmp4j.agent.CommandProcessor;
 import org.snmp4j.agent.DuplicateRegistrationException;
 import org.snmp4j.agent.MOGroup;
 import org.snmp4j.agent.ManagedObject;
+import org.snmp4j.agent.mo.MOScalar;
 import org.snmp4j.agent.mo.MOTableRow;
 import org.snmp4j.agent.mo.snmp.RowStatus;
 import org.snmp4j.agent.mo.snmp.SnmpCommunityMIB;
@@ -35,12 +36,7 @@ import org.snmp4j.mp.MPv3;
 import org.snmp4j.security.SecurityLevel;
 import org.snmp4j.security.SecurityModel;
 import org.snmp4j.security.USM;
-import org.snmp4j.smi.Address;
-import org.snmp4j.smi.GenericAddress;
-import org.snmp4j.smi.Integer32;
-import org.snmp4j.smi.OID;
-import org.snmp4j.smi.OctetString;
-import org.snmp4j.smi.Variable;
+import org.snmp4j.smi.*;
 import org.snmp4j.transport.TransportMappings;
 
 public class SNMPAgent extends BaseAgent {
@@ -54,6 +50,7 @@ public class SNMPAgent extends BaseAgent {
      */
 
     private Simulator sim;
+    private MOScalar speed;
 
     public SNMPAgent(String address, Simulator sim) throws IOException {
 
@@ -167,6 +164,8 @@ public class SNMPAgent extends BaseAgent {
         finishInit();
         run();
         sendColdStartNotification();
+
+        initializeMIB();
     }
 
     /**
@@ -182,6 +181,29 @@ public class SNMPAgent extends BaseAgent {
 
     public void unregisterManagedObject(MOGroup moGroup) {
         moGroup.unregisterMOs(server, getContext(moGroup));
+    }
+
+    private void initializeMIB() {
+
+        OID sysDescr = new OID(".1.3.6.1.2.1.1.1.0");
+        OID speedOID = new OID(".1.3.6.1.2.1.1.99.0");
+
+        this.unregisterManagedObject(this.getSnmpv2MIB());
+
+        speed = MOCreator.createReadOnly(speedOID, "0");
+
+        this.registerManagedObject(MOCreator.createReadOnly(sysDescr,"EH NOIS Q VOA BRUSHAUM"));
+        this.registerManagedObject(speed);
+
+    }
+
+    public void updateData() {
+        Float fSpeed = sim.getCar().getCurrentSpeedKmh();
+
+        if(fSpeed != null && speed != null) {
+            speed.setValue(new OctetString(fSpeed.toString()));
+        }
+
     }
 
 }

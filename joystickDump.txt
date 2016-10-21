@@ -1,4 +1,7 @@
-Creation Date: 2016-10-11
-Creation Time: 01:34:22
+Creation Date: 2016-10-20
+Creation Time: 22:04:08
 
-No joysticks found!
+Joystick[0]:Microsoft Hardware USB Mouse
+  buttons:0
+  axes:1
+   JoystickAxis[name=Axis 6, parent=Microsoft Hardware USB Mouse, id=0, logicalId=unknown, isAnalog=true, isRelative=true, deadZone=0.0]
