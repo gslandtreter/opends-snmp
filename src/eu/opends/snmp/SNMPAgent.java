@@ -5,8 +5,9 @@
 package eu.opends.snmp;
 
 
-import eu.opends.main.Simulator;
 
+import eu.opends.main.Simulator;
+import eu.opends.knowledgeBase.KnowledgeBase;
 
 import java.io.DataInputStream;
 
@@ -238,10 +239,10 @@ public class SNMPAgent extends BaseAgent {
         this.registerManagedObject(motorMaxPower);
 
 
-        btryCapacity = MOCreator.createReadOnly(btryCapacityOID, 9001);
+        btryCapacity = MOCreator.createReadOnly(btryCapacityOID, sim.getCar().BATTERYWh);
         this.registerManagedObject(btryCapacity);
 
-        btryModuleCount = MOCreator.createReadOnly(btryModuleCountOID, 4);
+        btryModuleCount = MOCreator.createReadOnly(btryModuleCountOID, 10);
         this.registerManagedObject(btryModuleCount);
 
         mibInitialized = true;
@@ -251,7 +252,14 @@ public class SNMPAgent extends BaseAgent {
 
         if(!mibInitialized)
             return;
+        //try {
+        Float fBattery = sim.getCar().getWhLeft();
+        btryCapacity.setValue(new Gauge32(fBattery.longValue()));
+        //}
+        //catch(Exception ex)
+        //{
 
+        //}
         Float fSpeed = sim.getCar().getCurrentSpeedKmh();
         evSpeed.setValue(new Gauge32(fSpeed.longValue()));
 
@@ -261,6 +269,9 @@ public class SNMPAgent extends BaseAgent {
         Float fMileage = sim.getCar().getMileage() / 1000.0f;
         evKM.setValue(new OctetString(fMileage.toString()));
 
+
+        //int iCapacity = 90000;//sim.getCar().getMileage() / 1000.0f;
+        //btryCapacity.setValue(new Integer32(iCapacity));
 
     }
 

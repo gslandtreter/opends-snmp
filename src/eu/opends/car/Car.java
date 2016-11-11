@@ -96,7 +96,7 @@ public abstract class Car
     protected SpotLight rightHeadLight;
     protected float lightIntensity = 0;
     protected String modelPath = "Test";
-
+	public static final int BATTERYWh = 90000;
     
     protected void init()
     {
@@ -751,7 +751,17 @@ public abstract class Car
 		else
 			return "Off";
 	}
-	
+
+	public float getFuelLeft()
+	{
+		float fuelLeft = 60 - getPowerTrain().getTotalFuelConsumption(); //TODO set max Capacity
+		return fuelLeft;
+	}
+	public float getWhLeft()
+	{
+		float kwhLeft = BATTERYWh - getPowerTrain().getTotalWhConsumption(); //TODO set max Capacity
+		return kwhLeft;
+	}
 	
 	public void setBrakeLight(boolean setToOn)
 	{

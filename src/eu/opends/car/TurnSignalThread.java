@@ -166,10 +166,8 @@ public class TurnSignalThread extends Thread
 			lightTexturesContainer.setLightState(targetLightState);
 	}
 
-
 	public TurnSignalState getTurnSignalState() 
 	{
 		return targetState;		
 	}
-	
 }

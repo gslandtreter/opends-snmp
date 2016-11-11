@@ -91,11 +91,11 @@ public class SteeringCar extends Car
 		mass = scenarioLoader.getChassisMass();
 		
 		minSpeed = scenarioLoader.getCarProperty(CarProperty.engine_minSpeed, SimulationDefaults.engine_minSpeed);
-		maxSpeed = scenarioLoader.getCarProperty(CarProperty.engine_maxSpeed, SimulationDefaults.engine_maxSpeed);
+		maxSpeed = 325;//scenarioLoader.getCarProperty(CarProperty.engine_maxSpeed, SimulationDefaults.engine_maxSpeed);
 			
 		decelerationBrake = scenarioLoader.getCarProperty(CarProperty.brake_decelerationBrake, 
 				SimulationDefaults.brake_decelerationBrake);
-		maxBrakeForce = 0.004375f * decelerationBrake * mass;
+		maxBrakeForce = 0.014375f * decelerationBrake * mass;//0.004375f * decelerationBrake * mass;
 		
 		decelerationFreeWheel = scenarioLoader.getCarProperty(CarProperty.brake_decelerationFreeWheel, 
 				SimulationDefaults.brake_decelerationFreeWheel);

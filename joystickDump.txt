@@ -1,7 +1,45 @@
-Creation Date: 2016-10-21
-Creation Time: 17:57:56
+Creation Date: 2016-11-11
+Creation Time: 01:01:15
 
-Joystick[0]:Microsoft Hardware USB Mouse
-  buttons:0
-  axes:1
-   JoystickAxis[name=Axis 6, parent=Microsoft Hardware USB Mouse, id=0, logicalId=unknown, isAnalog=true, isRelative=true, deadZone=0.0]
+Joystick[0]:Logitech G27 Racing Wheel USB
+  buttons:23
+   JoystickButton[name=Button 0, parent=Logitech G27 Racing Wheel USB, id=0, logicalId=0]
+   JoystickButton[name=Button 1, parent=Logitech G27 Racing Wheel USB, id=1, logicalId=1]
+   JoystickButton[name=Button 2, parent=Logitech G27 Racing Wheel USB, id=2, logicalId=2]
+   JoystickButton[name=Button 3, parent=Logitech G27 Racing Wheel USB, id=3, logicalId=3]
+   JoystickButton[name=Button 4, parent=Logitech G27 Racing Wheel USB, id=4, logicalId=4]
+   JoystickButton[name=Button 5, parent=Logitech G27 Racing Wheel USB, id=5, logicalId=5]
+   JoystickButton[name=Button 6, parent=Logitech G27 Racing Wheel USB, id=6, logicalId=6]
+   JoystickButton[name=Button 7, parent=Logitech G27 Racing Wheel USB, id=7, logicalId=7]
+   JoystickButton[name=Button 8, parent=Logitech G27 Racing Wheel USB, id=8, logicalId=8]
+   JoystickButton[name=Button 9, parent=Logitech G27 Racing Wheel USB, id=9, logicalId=9]
+   JoystickButton[name=Button 10, parent=Logitech G27 Racing Wheel USB, id=10, logicalId=10]
+   JoystickButton[name=Button 11, parent=Logitech G27 Racing Wheel USB, id=11, logicalId=11]
+   JoystickButton[name=Button 12, parent=Logitech G27 Racing Wheel USB, id=12, logicalId=12]
+   JoystickButton[name=Button 13, parent=Logitech G27 Racing Wheel USB, id=13, logicalId=13]
+   JoystickButton[name=Button 14, parent=Logitech G27 Racing Wheel USB, id=14, logicalId=14]
+   JoystickButton[name=Button 15, parent=Logitech G27 Racing Wheel USB, id=15, logicalId=15]
+   JoystickButton[name=Button 16, parent=Logitech G27 Racing Wheel USB, id=16, logicalId=16]
+   JoystickButton[name=Button 17, parent=Logitech G27 Racing Wheel USB, id=17, logicalId=17]
+   JoystickButton[name=Button 18, parent=Logitech G27 Racing Wheel USB, id=18, logicalId=18]
+   JoystickButton[name=Button 19, parent=Logitech G27 Racing Wheel USB, id=19, logicalId=19]
+   JoystickButton[name=Button 20, parent=Logitech G27 Racing Wheel USB, id=20, logicalId=20]
+   JoystickButton[name=Button 21, parent=Logitech G27 Racing Wheel USB, id=21, logicalId=21]
+   JoystickButton[name=Button 22, parent=Logitech G27 Racing Wheel USB, id=22, logicalId=23]
+  axes:8
+   JoystickAxis[name=Hat Switch, parent=Logitech G27 Racing Wheel USB, id=0, logicalId=pov, isAnalog=false, isRelative=false, deadZone=0.0]
+   JoystickAxis[name=pov_x, parent=Logitech G27 Racing Wheel USB, id=1, logicalId=pov_x, isAnalog=false, isRelative=false, deadZone=0.0]
+   JoystickAxis[name=pov_y, parent=Logitech G27 Racing Wheel USB, id=2, logicalId=pov_y, isAnalog=false, isRelative=false, deadZone=0.0]
+   JoystickAxis[name=Wheel axis, parent=Logitech G27 Racing Wheel USB, id=3, logicalId=x, isAnalog=true, isRelative=false, deadZone=0.0]
+   JoystickAxis[name=Combined pedals, parent=Logitech G27 Racing Wheel USB, id=4, logicalId=slider, isAnalog=true, isRelative=false, deadZone=0.0]
+   JoystickAxis[name=Brake, parent=Logitech G27 Racing Wheel USB, id=5, logicalId=rz, isAnalog=true, isRelative=false, deadZone=0.0]
+   JoystickAxis[name=Accelerator, parent=Logitech G27 Racing Wheel USB, id=6, logicalId=y, isAnalog=true, isRelative=false, deadZone=0.0]
+   JoystickAxis[name=Clutch, parent=Logitech G27 Racing Wheel USB, id=7, logicalId=slider, isAnalog=true, isRelative=false, deadZone=0.0]
+Joystick[1]:Fanatec USB Pedals
+  buttons:1
+   JoystickButton[name=Button 0, parent=Fanatec USB Pedals, id=0, logicalId=0]
+  axes:4
+   JoystickAxis[name=X Rotation, parent=Fanatec USB Pedals, id=0, logicalId=rx, isAnalog=true, isRelative=false, deadZone=0.0]
+   JoystickAxis[name=Y Rotation, parent=Fanatec USB Pedals, id=1, logicalId=ry, isAnalog=true, isRelative=false, deadZone=0.0]
+   JoystickAxis[name=Z Rotation, parent=Fanatec USB Pedals, id=2, logicalId=rz, isAnalog=true, isRelative=false, deadZone=0.0]
+   JoystickAxis[name=Slider, parent=Fanatec USB Pedals, id=3, logicalId=slider, isAnalog=true, isRelative=false, deadZone=0.0]

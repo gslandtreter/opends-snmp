@@ -40,7 +40,7 @@ public class PowerTrain
 	private ArrayList<FuelConsumption> fuelConsumptionList = new ArrayList<FuelConsumption>();
 		
 	// (default) displacement volume of the engine (in cm^3)
-	private final float defaultDisplacementVolumeInCCM = 1800f;
+	private final float defaultDisplacementVolumeInCCM = 26000f;
 	
 	// update fuel panel every 500 ms
 	private final int fuelConsumptionUpdateInterval = 500;
@@ -49,6 +49,7 @@ public class PowerTrain
 	private final int observationPeriod = 2000;
 	
 	private float totalFuelConsumption = 0;
+	private float totalWhConsumption = 0;
 	private float litersPer100Km = 0;
 	private float litersPerHour = 0;
 	private float previousVelocity = 0;
@@ -114,7 +115,10 @@ public class PowerTrain
 	{
 		return totalFuelConsumption;
 	}
-	
+	public float getTotalWhConsumption()
+	{
+		return totalWhConsumption;
+	}
 	
 	public float getPAccel(float tpf, float gasPedalPressIntensity)
 	{
@@ -151,6 +155,7 @@ public class PowerTrain
 	public void resetTotalFuelConsumption()
 	{
 		totalFuelConsumption = 0;
+		totalWhConsumption = 0;
 	}
 	
 	
@@ -167,6 +172,7 @@ public class PowerTrain
 		
 		// amount of fuel burned in current frame (in g == kJ/s * s * g/kJ)
 		float nettoFuelInGrams = PEngine * deltaT / lowerHeatValue;
+		float netWh = nettoFuelInGrams/760f * 174f;
 		
 		// regard additional injection of fuel to cool engine
 		// linear fuel usage factor: value between 1 (for RPM <= 3600) and 1.5 (for RPM >= 4800) 
@@ -176,10 +182,13 @@ public class PowerTrain
 		float fuelInLiters = bruttoFuelInGrams/760f;
 		
 		// if engine is idle (no fuel consumption, declutched and engine on)
-		if(isIdleEngine(fuelInLiters))
+		if(isIdleEngine(fuelInLiters)) {
 			fuelInLiters = getIdleFuelConsumption(deltaT);
-		
+			netWh = 0;
+		}
+
 		totalFuelConsumption += fuelInLiters;
+		totalWhConsumption += netWh;
 		
 		// add fuel consumption (in current frame) to the list
 		fuelConsumptionList.add(new FuelConsumption(now, distance, deltaT, fuelInLiters));

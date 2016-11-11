@@ -261,7 +261,6 @@ public class ManualTransmission
 		return bestGear;
 	}
 
-
 	public float getMinRPM() 
 	{
 		return minRPM;

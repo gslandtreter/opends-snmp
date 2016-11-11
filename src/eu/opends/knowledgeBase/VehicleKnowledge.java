@@ -347,5 +347,4 @@ public class VehicleKnowledge
 		// convert radian to degree
 		return angle_rad * 180/FastMath.PI;
 	}
-
 }
