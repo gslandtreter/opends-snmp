@@ -40,6 +40,8 @@ import org.snmp4j.security.USM;
 import org.snmp4j.smi.*;
 import org.snmp4j.transport.TransportMappings;
 
+import static org.snmp4j.agent.mo.snmp.NotificationLogMib.NlmLogVariableValueTypeEnum.integer32;
+
 public class SNMPAgent extends BaseAgent {
 
     private String address;
@@ -55,7 +57,7 @@ public class SNMPAgent extends BaseAgent {
 
     private MOScalar evBrandModel, evVIN,  evMaxPower, evSpeed, evLocation, evKM;
     private MOScalar motorDescription, motorRPM, motorMaxPower;
-    private MOScalar btryCapacity, btryModuleCount;
+    private MOScalar btryCapacity, btryChargeState, btryModuleCount;
 
     public SNMPAgent(String address, Simulator sim) throws IOException {
 
@@ -207,7 +209,8 @@ public class SNMPAgent extends BaseAgent {
         OID motorMaxPowerOID = new OID(".1.3.6.1.4.1.12619.5.8.3.0");
 
         OID btryCapacityOID = new OID(".1.3.6.1.4.1.12619.5.9.1.0");
-        OID btryModuleCountOID = new OID(".1.3.6.1.4.1.12619.5.9.2.0");
+        OID btryChargeStateOID = new OID(".1.3.6.1.4.1.12619.5.9.2.0");
+        OID btryModuleCountOID = new OID(".1.3.6.1.4.1.12619.5.9.3.0");
 
         //Inicializa Objetos da MIB
         evBrandModel = MOCreator.createReadOnly(evBrandModelOID, "Tesla Model Bruxao S");
@@ -241,6 +244,10 @@ public class SNMPAgent extends BaseAgent {
 
         btryCapacity = MOCreator.createReadOnly(btryCapacityOID, sim.getCar().BATTERYWh);
         this.registerManagedObject(btryCapacity);
+        btryCapacity.setValue(new OctetString(String.valueOf(sim.getCar().BATTERYWh)));
+
+        btryChargeState = MOCreator.createReadOnly(btryChargeStateOID, sim.getCar().BATTERYWh);
+        this.registerManagedObject(btryChargeState);
 
         btryModuleCount = MOCreator.createReadOnly(btryModuleCountOID, 10);
         this.registerManagedObject(btryModuleCount);
@@ -254,7 +261,7 @@ public class SNMPAgent extends BaseAgent {
             return;
         //try {
         Float fBattery = sim.getCar().getWhLeft();
-        btryCapacity.setValue(new Gauge32(fBattery.longValue()));
+        btryChargeState.setValue(new Gauge32(fBattery.longValue()));
         //}
         //catch(Exception ex)
         //{
