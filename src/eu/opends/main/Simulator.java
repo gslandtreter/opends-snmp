@@ -382,7 +382,7 @@ public class Simulator extends SimulationBasics
         // setup key binding
 		keyBindingCenter = new KeyBindingCenter(this);
         
-        AudioCenter.init(this);
+        //AudioCenter.init(this);
 
         // setup camera settings
         cameraFactory = new SimulatorCam(this, car);
@@ -560,7 +560,7 @@ public class Simulator extends SimulationBasics
 			SpeedControlCenter.update();
 			
 			// update necessary even in pause
-			AudioCenter.update(tpf, cam);
+			//AudioCenter.update(tpf, cam);
 			
 			if(!isPause())
 				steeringTask.update(tpf);

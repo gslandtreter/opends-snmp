@@ -43,8 +43,8 @@ public class Transmission
 	private static final float wheelCircumference = 380.0f;
 	
 	// rotation per minute settings
-	private static float maxRPM = 7500f;
-	private static float minRPM = 750f;
+	private static float maxRPM = 0f;//7500f;
+	private static float minRPM = 0f;//750f;
 	
 	private Car car;
 	private int gear;
@@ -64,10 +64,10 @@ public class Transmission
 		isAutomaticTransmission = scenarioLoader.isAutomaticTransmission(SimulationDefaults.transmission_automatic);
 		reverseGear = scenarioLoader.getReverseGear(SimulationDefaults.transmission_reverseGear);
 		neutralGear = 0.0f;
-		forwardGears = scenarioLoader.getForwardGears(SimulationDefaults.transmission_forwardGears);
+		forwardGears = new Float[]{1.281f, 0.953f, 0.678f};//scenarioLoader.getForwardGears(SimulationDefaults.transmission_forwardGears);
 		numberOfGears = forwardGears.length;
-		minRPM = scenarioLoader.getCarProperty(CarProperty.engine_minRPM, SimulationDefaults.engine_minRPM);
-		maxRPM = scenarioLoader.getCarProperty(CarProperty.engine_maxRPM, SimulationDefaults.engine_maxRPM);
+		minRPM = 0f;//scenarioLoader.getCarProperty(CarProperty.engine_minRPM, SimulationDefaults.engine_minRPM);
+		maxRPM = 15000f;//scenarioLoader.getCarProperty(CarProperty.engine_maxRPM, SimulationDefaults.engine_maxRPM);
 		
 		setGear(1, isAutomaticTransmission, false);
 	}
@@ -97,6 +97,7 @@ public class Transmission
 		}
 		
 		return Math.min(1.0f, Math.max(0.0f,powerPercentage));
+		//return 1f;
 	}
 	
 	
@@ -149,7 +150,7 @@ public class Transmission
 			currentRPM = Math.max(currentRPM,minRPM);
 		
 		// do not allow rpm changes of more than 5000 rpm in one second
-		float rpmChange = 5000f * tpf;
+		float rpmChange = 50000f * tpf;//5000f * tpf;
 		if((previousRPM  - currentRPM) > rpmChange)
 			currentRPM = previousRPM - rpmChange;
 		else if((currentRPM - previousRPM) > rpmChange)
@@ -209,8 +210,10 @@ public class Transmission
 			powerPercentage = powerPercentage * (limitedSpeed - currentVehicleSpeed);
 		
 		// accelerate
-		car.getCarControl().accelerate(pAccel * powerPercentage * Math.signum(gear));
-		
+		//car.getCarControl().accelerate(pAccel * powerPercentage * Math.signum(gear));
+		pAccel = pAccel * Math.signum(gear);
+		car.getCarControl().accelerate(pAccel);
+
 		// output texts
 		PanelCenter.setGearIndicator(gear, isAutomaticTransmission);
 		PanelCenter.getEngineSpeedText().setText((int) currentEngineSpeed + " rpm");

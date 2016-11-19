@@ -97,9 +97,9 @@ public class SimulationDefaults
 	public static Float light_intensity = 0.0f;
 	public static Boolean transmission_automatic = true;
 	public static Float transmission_reverseGear = 3.182f;
-	public static Float[] transmission_forwardGears = new Float[]{3.615f, 1.955f, 1.281f, 0.973f, 0.778f, 0.646f};
-	public static Float engine_minRPM = 750f;
-	public static Float engine_maxRPM = 7500f;
+	public static Float[] transmission_forwardGears = new Float[]{1.281f, 0.973f, 0.778f};//, 0.646f};
+	public static Float engine_minRPM = 0f;//750f;
+	public static Float engine_maxRPM = 15000f;
 	public static Vector3f initialCarPosition = new Vector3f(-36,0,0);
 	public static Quaternion initialCarRotation = new Quaternion(0, 0, 0, 1);
 	public static String skyTexture = "Textures/Sky/Bright/mountain.dds";

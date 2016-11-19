@@ -21,6 +21,7 @@ package eu.opends.car;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.lang.String;
 
 import com.jme3.math.FastMath;
 
@@ -133,10 +134,10 @@ public class PowerTrain
 		
 		// PAccel (in kJ/s)
 		// avoid negative values, as they block the brake in case no key is pressed
-		float pAccel = Math.max(0, pEngine - pLoad);
-		resultingPower = Math.max(0, pLoad - pEngine);
+		float pAccel = Math.max(0, pEngine - pLoad) * 1/tpf ;
+		resultingPower = Math.max(0, pLoad - pEngine) * 1/tpf;
 		
-		//System.out.println(pAccel);
+		System.out.println("Load: " + pLoad + "  Engine: " + pEngine + "  Total: " + pAccel);
 		
 		// apply direction (negative = forward, positive = backward, 0 = none)
 		return FastMath.sign(gasPedalPressIntensity) * pAccel;
@@ -294,33 +295,39 @@ public class PowerTrain
 	private float getPEngine(float gasPedalPressIntensity)
 	{
 		ScenarioLoader scenarioLoader = SimulationBasics.getDrivingTask().getScenarioLoader();
-		float displacementVolumeInCCM = scenarioLoader.getCarProperty(CarProperty.engine_displacement, 
-				defaultDisplacementVolumeInCCM);
+		//float displacementVolumeInCCM = scenarioLoader.getCarProperty(CarProperty.engine_displacement, defaultDisplacementVolumeInCCM);
 		
 		// rotations per minute in current frame
 		float rotationsPerMinute = car.getTransmission().getRPM();
 		
 		// limit RPM to values between 1500 and 5100 (for bmep computation)
-		rotationsPerMinute = Math.min(5100f, Math.max(rotationsPerMinute, 1500f));
+		//rotationsPerMinute = Math.min(5100f, Math.max(rotationsPerMinute, 1500f));
 		
 		// rotations per second in current frame
-		float rotationsPerSecond = rotationsPerMinute/60f;
+		//float rotationsPerSecond = rotationsPerMinute/60f;
 		
 		// brake mean effective pressure in current frame (in kN/m^2)
-		float bmep = getBmep(rotationsPerSecond);
+		//float bmep = getBmep(rotationsPerSecond);
 		
 		// displacement volume (in m^3)
-		float displacementVolume = displacementVolumeInCCM * 0.000001f;
+		//float displacementVolume = displacementVolumeInCCM * 0.000001f;
 		
-		// maximum engine power in current frame (in kJ/s)
-		float pEngine = bmep * rotationsPerSecond * displacementVolume/2f;
-		
+		// maximum engine power in current frame (in kJ/s) = kW!!!!!
+		//float pEngine = bmep * rotationsPerSecond * displacementVolume/2f;
+		float pEngine;
+
+		if (rotationsPerMinute < 8000f){
+			pEngine = Math.min(300f, 0.1f*rotationsPerMinute+80);
+		}
+		else {
+			pEngine = Math.max(0f, 870f - 0.0714f*rotationsPerMinute);
+		}
+
 		//regard gas pedal state
 		return pEngine * FastMath.abs(gasPedalPressIntensity);
 	}
-	
-	
-	private static float getBmep(float rotationsPerSecond) 
+
+	/*private static float getBmep(float rotationsPerSecond)
 	{
 		float a0 = -19950.8f;
 		float a1 =  3479.90f;
@@ -338,14 +345,15 @@ public class PowerTrain
 		float N5 = N4 * rotationsPerSecond;
 		float N6 = N5 * rotationsPerSecond;
 		float N7 = N6 * rotationsPerSecond;
-		
+
 		// bmep (in kPa == kN/m^2)
 		float bmep = a0 + a1*N1 + a2*N2 + a3*N3 + a4*N4 + a5*N5 + a6*N6 + a7*N7;
-		
+
+		float bmep = 3479.90f;
+
 		return bmep;
 	}
-	
-/*	
+
 	private static float getBmep(float rotationsPerSecond) 
 	{
 		float a0 = -1200.51f;
@@ -387,11 +395,11 @@ public class PowerTrain
 		float PTire = getPTire(velocity, vehicleMass, gravityConstant); 
 		
 		// power to overcome air resistance (in kW)
-		float PAir = getPAir(velocity); 
+		float PAir = getPAir(velocity);
 		
 		// power to overcome inertia (in kW)
 		float PInertia = getPInertia(tpf, velocity, vehicleMass);
-		
+
 		// power to overcome potential energy (in kW)
 		float PGrade = getPGrade(velocity, vehicleMass, gravityConstant); 
 		
@@ -402,7 +410,9 @@ public class PowerTrain
 		float PInner = getPInner();
 
 		// PLoad (in kW == kJ/s)
-		return PTire + PAir + PInertia + PGrade + PAccessories + PInner;
+		float PLoad = PTire + PAir/(18*tpf) + PInertia + PGrade + PAccessories + PInner;
+		//System.out.print(PTire + " Air: " + PAir  + " Total: " + PLoad);
+		return PLoad;
 	}
 
 
@@ -415,27 +425,27 @@ public class PowerTrain
 		
 		// convert to kW
 		return pTire * 0.001f;
+		//return 0f;
 	}
-	
-	
-	private static float getPAir(float velocity) 
+
+
+	private static float getPAir(float velocity)
 	{
 		// density of air (in kg/m^3)
 		float densityOfAir = 1.3f;
-		
+
 		// drag coefficient
 		float dragCoefficient = 0.3f;
-		
+
 		// frontal area of the car (in m^2)
 		float frontalArea = 2.0f;
-		
+
 		// power to overcome air resistance (in W == kg*m^2/s^3 ==  kg/m^3 * 1 * m^2 * m^3/s^3)
 		float pAir = 0.5f * densityOfAir * dragCoefficient * frontalArea * FastMath.pow(velocity,3);
-		
+
 		// convert to kW
 		return pAir * 0.001f;
 	}
-	
 
 	private float getPInertia(float deltaT, float currentVelocity, float vehicleMass) 
 	{
@@ -450,7 +460,7 @@ public class PowerTrain
 		float pInertia = 0.5f * rotatingMass * (deltaV * FastMath.abs(deltaV) / deltaT);
 		
 		// convert to kW
-		return pInertia * 0.001f;
+		return pInertia * 0.001f/deltaT;
 	}
 	
 	

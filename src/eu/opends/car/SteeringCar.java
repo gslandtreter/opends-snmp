@@ -88,10 +88,10 @@ public class SteeringCar extends Car
 		// add start position as reset position
 		Simulator.getResetPositionList().add(new ResetPosition(initialPosition,initialRotation));
 		
-		mass = scenarioLoader.getChassisMass();
+		mass = 2000f;//scenarioLoader.getChassisMass();
 		
 		minSpeed = scenarioLoader.getCarProperty(CarProperty.engine_minSpeed, SimulationDefaults.engine_minSpeed);
-		maxSpeed = 325;//scenarioLoader.getCarProperty(CarProperty.engine_maxSpeed, SimulationDefaults.engine_maxSpeed);
+		maxSpeed = 250;//scenarioLoader.getCarProperty(CarProperty.engine_maxSpeed, SimulationDefaults.engine_maxSpeed);
 			
 		decelerationBrake = scenarioLoader.getCarProperty(CarProperty.brake_decelerationBrake, 
 				SimulationDefaults.brake_decelerationBrake);
@@ -174,39 +174,9 @@ public class SteeringCar extends Car
 	// will be called, in every frame
 	public void update(float tpf)
 	{
-		// accelerate
-		float pAccel = 0;
-		if(!engineOn)
-		{
-			// apply 0 acceleration when engine not running
-			pAccel = powerTrain.getPAccel(tpf, 0) * 30f;
-		}
-		else if(isAutoAcceleration && (getCurrentSpeedKmh() < minSpeed))
-		{
-			// apply maximum acceleration (= -1 for forward) to maintain minimum speed
-			pAccel = powerTrain.getPAccel(tpf, -1) * 30f;
-		}
-		else if(isCruiseControl && (getCurrentSpeedKmh() < targetSpeedCruiseControl))
-		{
-			// apply maximum acceleration (= -1 for forward) to maintain target speed
-			pAccel = powerTrain.getPAccel(tpf, -1) * 30f;
-			
-			if(isAdaptiveCruiseControl)
-			{
-				// lower speed if leading car is getting to close
-				pAccel = getAdaptivePAccel(pAccel);
-			}
-		}
-		else
-		{
-			// apply acceleration according to gas pedal state
-			pAccel = powerTrain.getPAccel(tpf, acceleratorPedalIntensity) * 30f;
-		}
-		transmission.performAcceleration(pAccel);
-		
 		// brake lights
 		setBrakeLight(brakePedalIntensity > 0);
-		
+
 		if(handBrakeApplied)
 		{
 			// hand brake
@@ -215,14 +185,35 @@ public class SteeringCar extends Car
 		}
 		else
 		{
-			// brake	
+			// brake
 			float appliedBrakeForce = brakePedalIntensity * maxBrakeForce;
 			float currentFriction = powerTrain.getFrictionCoefficient() * maxFreeWheelBrakeForce;
 			carControl.brake(appliedBrakeForce + currentFriction);
 			PanelCenter.setHandBrakeIndicator(false);
 		}
-		
-		
+
+		// accelerate
+		float pAccel;
+		if (!engineOn) {
+			// apply 0 acceleration when engine not running
+			pAccel = powerTrain.getPAccel(tpf, 0) * 30f;
+		} else if (isAutoAcceleration && (getCurrentSpeedKmh() < minSpeed)) {
+			// apply maximum acceleration (= -1 for forward) to maintain minimum speed
+			pAccel = powerTrain.getPAccel(tpf, -1) * 30f;
+		} else if (isCruiseControl && (getCurrentSpeedKmh() < targetSpeedCruiseControl)) {
+			// apply maximum acceleration (= -1 for forward) to maintain target speed
+			pAccel = powerTrain.getPAccel(tpf, -1) * 30f;
+
+			if (isAdaptiveCruiseControl) {
+				// lower speed if leading car is getting to close
+				pAccel = getAdaptivePAccel(pAccel);
+			}
+		} else {
+			// apply acceleration according to gas pedal state
+			pAccel = powerTrain.getPAccel(tpf, acceleratorPedalIntensity); //* 30f; usando tpf no getPAccel
+		}
+		transmission.performAcceleration(pAccel);
+
 		// lights
 		leftHeadLight.setColor(ColorRGBA.White.mult(lightIntensity));
         leftHeadLight.setPosition(carModel.getLeftLightPosition());

@@ -169,7 +169,7 @@ public class CarModelLoader
 		
 		// center of mass
 		Vector3f centerOfMass = new Vector3f(getVector3f(properties, "centerOfMass", 0)).mult(chassisScale);
-		
+		centerOfMass.setZ(centerOfMass.getZ()/4);
 		// wheel position
 		float frontAxlePos = chassisScale.z * Float.parseFloat(properties.getProperty("frontAxlePos")) - centerOfMass.z;
 		float backAxlePos = chassisScale.z * Float.parseFloat(properties.getProperty("backAxlePos")) - centerOfMass.z;

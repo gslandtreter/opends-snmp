@@ -308,8 +308,7 @@ public abstract class Car
 	{
 		return transmission;
 	}
-	
-	
+
 	public PowerTrain getPowerTrain()
 	{
 		return powerTrain;
@@ -523,8 +522,7 @@ public abstract class Car
 		
 		return traction;
 	}
-	
-	
+
 	/**
 	 * Free wheel
 	 */
@@ -534,8 +532,7 @@ public abstract class Car
 		acceleratorPedalIntensity = 0;
 		brakePedalIntensity = 0;
 	}
-	
-	
+
 	/**
 	 * Steers the front wheels.
 	 * 
@@ -544,7 +541,9 @@ public abstract class Car
 	 */
 	public void steer(final float direction) 
 	{
-		carControl.steer(direction + steeringInfluenceByCrosswind);
+		float direction2 = Math.min(1f, direction*1.5f);
+		direction2 = Math.max(-1f, direction2*1.5f);
+		carControl.steer(direction2 + steeringInfluenceByCrosswind);
 		setSteeringWheelState(direction);
 	}
 
