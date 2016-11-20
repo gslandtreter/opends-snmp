@@ -761,6 +761,12 @@ public abstract class Car
 		float kwhLeft = BATTERYWh - getPowerTrain().getTotalWhConsumption(); //TODO set max Capacity
 		return kwhLeft;
 	}
+
+	public float getVoltage(){
+		float voltage = 290 + 90*(BATTERYWh - getPowerTrain().getTotalWhConsumption())/BATTERYWh;
+		return voltage;
+	}
+
 	
 	public void setBrakeLight(boolean setToOn)
 	{

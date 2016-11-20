@@ -57,7 +57,7 @@ public class SNMPAgent extends BaseAgent {
 
     private MOScalar evBrandModel, evVIN,  evMaxPower, evSpeed, evLocation, evKM;
     private MOScalar motorDescription, motorRPM, motorMaxPower;
-    private MOScalar btryCapacity, btryChargeState, btryModuleCount;
+    private MOScalar btryCapacity, btryChargeState, btryModuleCount, btryVoltage, btryCurrent;
 
     public SNMPAgent(String address, Simulator sim) throws IOException {
 
@@ -211,6 +211,8 @@ public class SNMPAgent extends BaseAgent {
         OID btryCapacityOID = new OID(".1.3.6.1.4.1.12619.5.9.1.0");
         OID btryChargeStateOID = new OID(".1.3.6.1.4.1.12619.5.9.2.0");
         OID btryModuleCountOID = new OID(".1.3.6.1.4.1.12619.5.9.3.0");
+        OID btryVoltageOID = new OID(".1.3.6.1.4.1.12619.5.9.4.0");
+        OID btryCurrentOID = new OID(".1.3.6.1.4.1.12619.5.9.5.0");
 
         //Inicializa Objetos da MIB
         evBrandModel = MOCreator.createReadOnly(evBrandModelOID, "Tesla Model Bruxao S");
@@ -249,6 +251,12 @@ public class SNMPAgent extends BaseAgent {
         btryChargeState = MOCreator.createReadOnly(btryChargeStateOID, sim.getCar().BATTERYWh);
         this.registerManagedObject(btryChargeState);
 
+        btryVoltage = MOCreator.createReadOnly(btryVoltageOID, 0);
+        this.registerManagedObject(btryVoltage);
+
+        btryCurrent = MOCreator.createReadOnly(btryCurrentOID, 0);
+        this.registerManagedObject(btryCurrent);
+
         btryModuleCount = MOCreator.createReadOnly(btryModuleCountOID, 10);
         this.registerManagedObject(btryModuleCount);
 
@@ -262,6 +270,9 @@ public class SNMPAgent extends BaseAgent {
         //try {
         Float fBattery = sim.getCar().getWhLeft();
         btryChargeState.setValue(new Gauge32(fBattery.longValue()));
+
+        Float fV = sim.getCar().getVoltage();
+        btryVoltage.setValue(new Gauge32(fV.longValue()));
         //}
         //catch(Exception ex)
         //{

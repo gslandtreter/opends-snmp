@@ -174,24 +174,6 @@ public class SteeringCar extends Car
 	// will be called, in every frame
 	public void update(float tpf)
 	{
-		// brake lights
-		setBrakeLight(brakePedalIntensity > 0);
-
-		if(handBrakeApplied)
-		{
-			// hand brake
-			carControl.brake(maxBrakeForce);
-			PanelCenter.setHandBrakeIndicator(true);
-		}
-		else
-		{
-			// brake
-			float appliedBrakeForce = brakePedalIntensity * maxBrakeForce;
-			float currentFriction = powerTrain.getFrictionCoefficient() * maxFreeWheelBrakeForce;
-			carControl.brake(appliedBrakeForce + currentFriction);
-			PanelCenter.setHandBrakeIndicator(false);
-		}
-
 		// accelerate
 		float pAccel;
 		if (!engineOn) {
@@ -213,6 +195,24 @@ public class SteeringCar extends Car
 			pAccel = powerTrain.getPAccel(tpf, acceleratorPedalIntensity); //* 30f; usando tpf no getPAccel
 		}
 		transmission.performAcceleration(pAccel);
+
+		// brake lights
+		setBrakeLight(brakePedalIntensity > 0);
+
+		if(handBrakeApplied)
+		{
+			// hand brake
+			carControl.brake(maxBrakeForce);
+			PanelCenter.setHandBrakeIndicator(true);
+		}
+		else
+		{
+			// brake
+			float appliedBrakeForce = brakePedalIntensity * maxBrakeForce;
+			float currentFriction = powerTrain.getFrictionCoefficient() * maxFreeWheelBrakeForce;
+			carControl.brake(appliedBrakeForce + currentFriction);
+			PanelCenter.setHandBrakeIndicator(false);
+		}
 
 		// lights
 		leftHeadLight.setColor(ColorRGBA.White.mult(lightIntensity));
