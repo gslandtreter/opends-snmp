@@ -21,13 +21,11 @@ package eu.opends.car;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
-import java.lang.String;
 
 import com.jme3.math.FastMath;
 
 import eu.opends.basics.SimulationBasics;
 import eu.opends.drivingTask.scenario.ScenarioLoader;
-import eu.opends.drivingTask.scenario.ScenarioLoader.CarProperty;
 import eu.opends.main.Simulator;
 import eu.opends.tools.PanelCenter;
 
@@ -135,9 +133,9 @@ public class PowerTrain
 		// PAccel (in kJ/s)
 		// avoid negative values, as they block the brake in case no key is pressed
 		float pAccel = Math.max(0, pEngine - pLoad) * 1/tpf ;
-		resultingPower = Math.max(0, pLoad - pEngine) * 1/tpf;
+		//resultingPower = Math.max(0, pLoad - pEngine) * 1/tpf;
 		
-		System.out.println("Load: " + pLoad + "  Engine: " + pEngine + "  Total: " + pAccel);
+		//System.out.println("Load: " + pLoad + "  Engine: " + pEngine + "  Total: " + pAccel);
 		
 		// apply direction (negative = forward, positive = backward, 0 = none)
 		return FastMath.sign(gasPedalPressIntensity) * pAccel;
@@ -292,71 +290,42 @@ public class PowerTrain
 	}
 	
 	
-	private float getPEngine(float gasPedalPressIntensity)
+	public float getPEngine(float gasPedalPressIntensity)
 	{
 		ScenarioLoader scenarioLoader = SimulationBasics.getDrivingTask().getScenarioLoader();
 		//float displacementVolumeInCCM = scenarioLoader.getCarProperty(CarProperty.engine_displacement, defaultDisplacementVolumeInCCM);
 		
 		// rotations per minute in current frame
 		float rotationsPerMinute = car.getTransmission().getRPM();
-		
-		// limit RPM to values between 1500 and 5100 (for bmep computation)
-		//rotationsPerMinute = Math.min(5100f, Math.max(rotationsPerMinute, 1500f));
-		
-		// rotations per second in current frame
-		//float rotationsPerSecond = rotationsPerMinute/60f;
-		
-		// brake mean effective pressure in current frame (in kN/m^2)
-		//float bmep = getBmep(rotationsPerSecond);
-		
-		// displacement volume (in m^3)
-		//float displacementVolume = displacementVolumeInCCM * 0.000001f;
-		
+
 		// maximum engine power in current frame (in kJ/s) = kW!!!!!
 		//float pEngine = bmep * rotationsPerSecond * displacementVolume/2f;
 		float pEngine;
 
-		if (rotationsPerMinute < 8000f){
-			pEngine = Math.min(300f, 0.1f*rotationsPerMinute+80);
-		}
-		else {
-			pEngine = Math.max(0f, 870f - 0.0714f*rotationsPerMinute);
-		}
+        pEngine = getPmax(rotationsPerMinute);
 
 		//regard gas pedal state
 		return pEngine * FastMath.abs(gasPedalPressIntensity);
 	}
 
-	/*private static float getBmep(float rotationsPerSecond)
+    public static float getPmax(float rotationsPerMinute)
 	{
-		float a0 = -19950.8f;
-		float a1 =  3479.90f;
-		float a2 = -231.809f;
-		float a3 =  8.25775f;
-		float a4 = -0.169919f;
-		float a5 =  0.00202259f;
-		float a6 = -0.000012921f;
-		float a7 =  0.0000000342208f;
+        // bmep (in kPa == kN/m^2)
+        float pMax;//
 
-		float N1 = rotationsPerSecond;
-		float N2 = N1 * rotationsPerSecond;
-		float N3 = N2 * rotationsPerSecond;
-		float N4 = N3 * rotationsPerSecond;
-		float N5 = N4 * rotationsPerSecond;
-		float N6 = N5 * rotationsPerSecond;
-		float N7 = N6 * rotationsPerSecond;
+        if (rotationsPerMinute < 7500f){
+            pMax = Math.min(300f, 0.06f*rotationsPerMinute+20);
+        }
+        else if (rotationsPerMinute < 8000f){
+            pMax = Math.max(0f, 3750f - 0.5f*rotationsPerMinute);
+        }
+        else {
+            pMax = 0f;
+        }
 
-		// bmep (in kPa == kN/m^2)
-		float bmep = a0 + a1*N1 + a2*N2 + a3*N3 + a4*N4 + a5*N5 + a6*N6 + a7*N7;
-
-		float bmep = 3479.90f;
-
-		return bmep;
-	}
-
-	private static float getBmep(float rotationsPerSecond) 
-	{
-		float a0 = -1200.51f;
+        return pMax;
+    }
+		/*float a0 = -1200.51f;
 		float a1 =  298.934f;
 		float a2 = -17.5860f;
 		float a3 =  0.563420f;
@@ -380,7 +349,7 @@ public class PowerTrain
 	}
 */	
 	
-	private float getPLoad(float tpf) 
+	public float getPLoad(float tpf)
 	{
 		// speed of car (in m/s)
 		float velocity = car.getCurrentSpeedMs();

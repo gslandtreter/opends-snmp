@@ -61,13 +61,13 @@ public class Transmission
 		
 		// load settings from driving task file
 		ScenarioLoader scenarioLoader = Simulator.getDrivingTask().getScenarioLoader();
-		isAutomaticTransmission = scenarioLoader.isAutomaticTransmission(SimulationDefaults.transmission_automatic);
+		isAutomaticTransmission = false;//scenarioLoader.isAutomaticTransmission(SimulationDefaults.transmission_automatic);
 		reverseGear = scenarioLoader.getReverseGear(SimulationDefaults.transmission_reverseGear);
 		neutralGear = 0.0f;
-		forwardGears = new Float[]{1.281f, 0.953f, 0.678f};//scenarioLoader.getForwardGears(SimulationDefaults.transmission_forwardGears);
+		forwardGears = new Float[]{1.281f, 0.678f};//scenarioLoader.getForwardGears(SimulationDefaults.transmission_forwardGears);
 		numberOfGears = forwardGears.length;
 		minRPM = 0f;//scenarioLoader.getCarProperty(CarProperty.engine_minRPM, SimulationDefaults.engine_minRPM);
-		maxRPM = 15000f;//scenarioLoader.getCarProperty(CarProperty.engine_maxRPM, SimulationDefaults.engine_maxRPM);
+		maxRPM = 8000f;//scenarioLoader.getCarProperty(CarProperty.engine_maxRPM, SimulationDefaults.engine_maxRPM);
 		
 		setGear(1, isAutomaticTransmission, false);
 	}
@@ -75,27 +75,22 @@ public class Transmission
 	
 	public float getPowerPercentage(int gear, float currentSpeed)
 	{	
-		float x = currentSpeed;
-		float x2 = x * currentSpeed;
-		float x3 = x2 * currentSpeed;
-		float x4 = x3 * currentSpeed;
-		float x5 = x4 * currentSpeed;
-		float x6 = x5 * currentSpeed;
-		
 		float powerPercentage = 0;
 		
 		switch (gear)
 		{
-			case 1  : powerPercentage = -2892.78f*x5+678.61f*x4+558.43f*x3-216.84f*x2+17.78f*x+0.58f; break;
-			case 2  : powerPercentage = -4206.38f*x6+4837.65f*x5-1897.61f*x4+310.7f*x3-34.7f*x2+3.82f*x+0.43f; break;
-			case 3  : powerPercentage = -3.17f*x3 + 1.44f*x2 + 0.12f*x + 0.27f; break;
-			case 4  : powerPercentage = -1.27f*x3 + 0.64f*x2 + 0.24f*x + 0.20f; break;
-			case 5  : powerPercentage = -0.47f*x3 + 0.12f*x2 + 0.35f*x + 0.11f; break;
-			case 6  : powerPercentage = -0.27f*x3 + 0.24f*x2 + 0.18f*x + 0.01f; break;
-			case -1 : powerPercentage = -1154.84f*x4 + 134.09f*x3 + 21.63f*x2 + 0.5f*x + 0.57f; break;
+			case 1  :
+				powerPercentage = car.getPowerTrain().getPmax(currentSpeed*forwardGears[0])/300f;
+				break;
+			case 2  :
+				powerPercentage = car.getPowerTrain().getPmax(currentSpeed*forwardGears[1])/300f;
+				break;
+			case -1 :
+				powerPercentage = car.getPowerTrain().getPmax(currentSpeed*reverseGear)/300f;
+				break;
 			case 0  : powerPercentage = 0; break;
 		}
-		
+
 		return Math.min(1.0f, Math.max(0.0f,powerPercentage));
 		//return 1f;
 	}
@@ -238,23 +233,16 @@ public class Transmission
 		}
 	}
 
-
-	private int findBestPowerGear(float speedPercentage) 
+	private int findBestPowerGear(float currentSpeed)
 	{
-		float bestPower = 0;
-		int bestGear = 1;
-		
-		for(int currentGear=1; currentGear<=numberOfGears; currentGear++)
-		{
-			float currentPower = getPowerPercentage(currentGear, speedPercentage);
-			if(currentPower > bestPower)
-			{
-				bestPower = currentPower;
-				bestGear = currentGear;
-			}
+		if (gear == 1){
+			if (currentRPM >7000f)	return 2;
+			else return 1;
 		}
-		
-		return bestGear;
+		else{
+			if (currentRPM < 1000f)	return 1;
+			else return 2;
+		}
 	}
 
 

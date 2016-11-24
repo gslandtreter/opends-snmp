@@ -174,27 +174,6 @@ public class SteeringCar extends Car
 	// will be called, in every frame
 	public void update(float tpf)
 	{
-		// accelerate
-		float pAccel;
-		if (!engineOn) {
-			// apply 0 acceleration when engine not running
-			pAccel = powerTrain.getPAccel(tpf, 0) * 30f;
-		} else if (isAutoAcceleration && (getCurrentSpeedKmh() < minSpeed)) {
-			// apply maximum acceleration (= -1 for forward) to maintain minimum speed
-			pAccel = powerTrain.getPAccel(tpf, -1) * 30f;
-		} else if (isCruiseControl && (getCurrentSpeedKmh() < targetSpeedCruiseControl)) {
-			// apply maximum acceleration (= -1 for forward) to maintain target speed
-			pAccel = powerTrain.getPAccel(tpf, -1) * 30f;
-
-			if (isAdaptiveCruiseControl) {
-				// lower speed if leading car is getting to close
-				pAccel = getAdaptivePAccel(pAccel);
-			}
-		} else {
-			// apply acceleration according to gas pedal state
-			pAccel = powerTrain.getPAccel(tpf, acceleratorPedalIntensity); //* 30f; usando tpf no getPAccel
-		}
-		transmission.performAcceleration(pAccel);
 
 		// brake lights
 		setBrakeLight(brakePedalIntensity > 0);
@@ -205,13 +184,39 @@ public class SteeringCar extends Car
 			carControl.brake(maxBrakeForce);
 			PanelCenter.setHandBrakeIndicator(true);
 		}
-		else
+		else if (brakePedalIntensity>0)
 		{
 			// brake
 			float appliedBrakeForce = brakePedalIntensity * maxBrakeForce;
 			float currentFriction = powerTrain.getFrictionCoefficient() * maxFreeWheelBrakeForce;
+			transmission.performAcceleration(0);
 			carControl.brake(appliedBrakeForce + currentFriction);
 			PanelCenter.setHandBrakeIndicator(false);
+		}
+		else
+		{
+			// accelerate
+			float pAccel;
+			if (!engineOn) {
+				// apply 0 acceleration when engine not running
+				pAccel = powerTrain.getPAccel(tpf, 0) * 30f;
+			} else if (isAutoAcceleration && (getCurrentSpeedKmh() < minSpeed)) {
+				// apply maximum acceleration (= -1 for forward) to maintain minimum speed
+				pAccel = powerTrain.getPAccel(tpf, -1) * 30f;
+			} else if (isCruiseControl && (getCurrentSpeedKmh() < targetSpeedCruiseControl)) {
+				// apply maximum acceleration (= -1 for forward) to maintain target speed
+				pAccel = powerTrain.getPAccel(tpf, -1) * 30f;
+
+				if (isAdaptiveCruiseControl) {
+					// lower speed if leading car is getting to close
+					pAccel = getAdaptivePAccel(pAccel);
+				}
+			} else {
+				// apply acceleration according to gas pedal state
+				pAccel = powerTrain.getPAccel(tpf, acceleratorPedalIntensity); //* 30f; usando tpf no getPAccel
+			}
+			transmission.performAcceleration(pAccel);
+
 		}
 
 		// lights
