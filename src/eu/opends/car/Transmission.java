@@ -61,7 +61,7 @@ public class Transmission
 		
 		// load settings from driving task file
 		ScenarioLoader scenarioLoader = Simulator.getDrivingTask().getScenarioLoader();
-		isAutomaticTransmission = false;//scenarioLoader.isAutomaticTransmission(SimulationDefaults.transmission_automatic);
+		isAutomaticTransmission = true;//scenarioLoader.isAutomaticTransmission(SimulationDefaults.transmission_automatic);
 		reverseGear = scenarioLoader.getReverseGear(SimulationDefaults.transmission_reverseGear);
 		neutralGear = 0.0f;
 		forwardGears = new Float[]{1.281f, 0.678f};//scenarioLoader.getForwardGears(SimulationDefaults.transmission_forwardGears);
@@ -185,24 +185,23 @@ public class Transmission
 	{
 		float currentEngineSpeed = getRPM();
 		float currentVehicleSpeed = FastMath.abs(car.getCarControl().getCurrentVehicleSpeedKmHour());
-		float speedPercentage = currentVehicleSpeed/speedAt100PercentMarker;
-		
+
 		int gear = getGear();		
 		
 		// change gear if necessary (only in automatic mode)
 		if(isAutomaticTransmission)
 		{
-			int bestGear = findBestPowerGear(speedPercentage);
+			int bestGear = findBestPowerGear();
 			setGear(bestGear, isAutomaticTransmission, false);
 		}
 		
 		// apply power model for selected gear
-		float powerPercentage = getPowerPercentage(gear, speedPercentage);
+		//float powerPercentage = getPowerPercentage(gear, speedPercentage);
 		
 		// cap if max speed was reached
-		float limitedSpeed = car.getMaxSpeed();
-		if((currentVehicleSpeed >= limitedSpeed-1))
-			powerPercentage = powerPercentage * (limitedSpeed - currentVehicleSpeed);
+		//float limitedSpeed = car.getMaxSpeed();
+		//if((currentVehicleSpeed >= limitedSpeed-1))
+		//	powerPercentage = powerPercentage * (limitedSpeed - currentVehicleSpeed);
 		
 		// accelerate
 		//car.getCarControl().accelerate(pAccel * powerPercentage * Math.signum(gear));
@@ -233,7 +232,7 @@ public class Transmission
 		}
 	}
 
-	private int findBestPowerGear(float currentSpeed)
+	private int findBestPowerGear()
 	{
 		if (gear == 1){
 			if (currentRPM >7000f)	return 2;
@@ -244,7 +243,6 @@ public class Transmission
 			else return 2;
 		}
 	}
-
 
 	public float getMinRPM() 
 	{

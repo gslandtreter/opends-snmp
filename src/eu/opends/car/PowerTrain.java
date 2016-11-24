@@ -292,7 +292,7 @@ public class PowerTrain
 	
 	public float getPEngine(float gasPedalPressIntensity)
 	{
-		ScenarioLoader scenarioLoader = SimulationBasics.getDrivingTask().getScenarioLoader();
+		//ScenarioLoader scenarioLoader = SimulationBasics.getDrivingTask().getScenarioLoader();
 		//float displacementVolumeInCCM = scenarioLoader.getCarProperty(CarProperty.engine_displacement, defaultDisplacementVolumeInCCM);
 		
 		// rotations per minute in current frame
@@ -314,7 +314,7 @@ public class PowerTrain
         float pMax;//
 
         if (rotationsPerMinute < 7500f){
-            pMax = Math.min(300f, 0.06f*rotationsPerMinute+20);
+            pMax = Math.min(300f, 0.06f*rotationsPerMinute+50);
         }
         else if (rotationsPerMinute < 8000f){
             pMax = Math.max(0f, 3750f - 0.5f*rotationsPerMinute);
@@ -325,29 +325,6 @@ public class PowerTrain
 
         return pMax;
     }
-		/*float a0 = -1200.51f;
-		float a1 =  298.934f;
-		float a2 = -17.5860f;
-		float a3 =  0.563420f;
-		float a4 = -0.0104629f;
-		float a5 =  0.000113228f;
-		float a6 = -0.000000664513f;
-		float a7 =  0.00000000163097f;
-
-		float N1 = rotationsPerSecond;
-		float N2 = N1 * rotationsPerSecond;
-		float N3 = N2 * rotationsPerSecond;
-		float N4 = N3 * rotationsPerSecond;
-		float N5 = N4 * rotationsPerSecond;
-		float N6 = N5 * rotationsPerSecond;
-		float N7 = N6 * rotationsPerSecond;
-		
-		// bmep (in kPa == kN/m^2)
-		float bmep = a0 + a1*N1 + a2*N2 + a3*N3 + a4*N4 + a5*N5 + a6*N6 + a7*N7;
-		
-		return bmep;
-	}
-*/	
 	
 	public float getPLoad(float tpf)
 	{
