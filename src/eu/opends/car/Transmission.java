@@ -72,7 +72,7 @@ public class Transmission
 		setGear(1, isAutomaticTransmission, false);
 	}
 	
-	
+	/*
 	public float getPowerPercentage(int gear, float currentSpeed)
 	{	
 		float powerPercentage = 0;
@@ -93,7 +93,7 @@ public class Transmission
 
 		return Math.min(1.0f, Math.max(0.0f,powerPercentage));
 		//return 1f;
-	}
+	}*/
 	
 	
 	public float getRPMPercentage()
@@ -239,7 +239,7 @@ public class Transmission
 			else return 1;
 		}
 		else{
-			if (currentRPM < 1000f)	return 1;
+			if (currentRPM < 2000f)	return 1;
 			else return 2;
 		}
 	}

@@ -767,6 +767,11 @@ public abstract class Car
 		return voltage;
 	}
 
+	public float getCurrent(){
+		float current = getPowerTrain().getInstantPower()/getVoltage();
+		return current;
+	}
+
 	
 	public void setBrakeLight(boolean setToOn)
 	{

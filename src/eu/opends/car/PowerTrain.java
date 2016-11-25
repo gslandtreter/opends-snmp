@@ -123,6 +123,7 @@ public class PowerTrain
 	{
 		// engine power needed in current frame (in kJ/s)
 		float pEngine = getPEngine(gasPedalPressIntensity);
+		resultingPower = pEngine;
 
 		// fuel consumption (in L) in current frame
 		computeFuelConsumption(tpf, pEngine);
@@ -314,7 +315,7 @@ public class PowerTrain
         float pMax;//
 
         if (rotationsPerMinute < 7500f){
-            pMax = Math.min(300f, 0.06f*rotationsPerMinute+50);
+            pMax = Math.min(300f, 0.06f*rotationsPerMinute+70);
         }
         else if (rotationsPerMinute < 8000f){
             pMax = Math.max(0f, 3750f - 0.5f*rotationsPerMinute);
@@ -356,7 +357,7 @@ public class PowerTrain
 		float PInner = getPInner();
 
 		// PLoad (in kW == kJ/s)
-		float PLoad = PTire + PAir/(18*tpf) + PInertia + PGrade + PAccessories + PInner;
+		float PLoad = PTire + PAir/(18*tpf) + PInertia + PGrade + PAccessories;// + PInner;
 		//System.out.print(PTire + " Air: " + PAir  + " Total: " + PLoad);
 		return PLoad;
 	}
@@ -432,6 +433,10 @@ public class PowerTrain
 		// from Diss_Ulrich_Kramer.pdf, page 163
 		float rpm = car.getTransmission().getRPM();
 		return (0.0000007f*rpm*rpm - 0.0005f*rpm + 10.9f);
+	}
+
+	public float getInstantPower(){
+		return resultingPower;
 	}
 
 }

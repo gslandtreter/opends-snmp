@@ -273,6 +273,9 @@ public class SNMPAgent extends BaseAgent {
 
         Float fV = sim.getCar().getVoltage();
         btryVoltage.setValue(new Gauge32(fV.longValue()));
+
+        Float fI = sim.getCar().getCurrent();
+        btryCurrent.setValue(new Gauge32(fI.longValue()));
         //}
         //catch(Exception ex)
         //{
