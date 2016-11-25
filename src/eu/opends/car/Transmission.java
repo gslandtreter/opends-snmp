@@ -235,7 +235,7 @@ public class Transmission
 	private int findBestPowerGear()
 	{
 		if (gear == 1){
-			if (currentRPM >7000f)	return 2;
+			if (currentRPM > 7000f)	return 2;
 			else return 1;
 		}
 		else{

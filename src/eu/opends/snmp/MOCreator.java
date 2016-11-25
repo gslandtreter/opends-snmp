@@ -4,8 +4,13 @@
 
 package eu.opends.snmp;
 
-import org.snmp4j.agent.mo.MOAccessImpl;
-import org.snmp4j.agent.mo.MOScalar;
+import org.snmp4j.agent.MOAccess;
+import org.snmp4j.agent.MOScope;
+import org.snmp4j.agent.mo.*;
+import org.snmp4j.agent.mo.snmp.SysUpTime;
+import org.snmp4j.agent.mo.snmp.tc.TextualConvention;
+import org.snmp4j.agent.request.SubRequest;
+import org.snmp4j.agent.mo.MOFactory;
 import org.snmp4j.smi.*;
 
 /**
@@ -14,13 +19,23 @@ import org.snmp4j.smi.*;
  *
  */
 public class MOCreator {
-    public static MOScalar createReadOnly(OID oid,Object value ){
+    public  static MOScalar createReadOnly(OID oid,Object value ){
         return new MOScalar(oid,
                 MOAccessImpl.ACCESS_READ_ONLY,
                 getVariable(value));
     }
 
-    private static Variable getVariable(Object value) {
+    public static MOTable createTable(org.snmp4j.smi.OID oid,
+                                      MOTableIndex indexDef,
+                                      MOColumn[] columns){
+        MOCreator moCreator = new MOCreator();
+        MOTable newTable = moCreator.createTable(oid, indexDef, columns);
+
+        return newTable;
+    }
+
+
+    private  static Variable getVariable(Object value) {
         if(value instanceof String) {
             return new OctetString((String)value);
         }

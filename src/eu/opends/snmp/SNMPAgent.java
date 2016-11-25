@@ -24,8 +24,7 @@ import org.snmp4j.agent.CommandProcessor;
 import org.snmp4j.agent.DuplicateRegistrationException;
 import org.snmp4j.agent.MOGroup;
 import org.snmp4j.agent.ManagedObject;
-import org.snmp4j.agent.mo.MOScalar;
-import org.snmp4j.agent.mo.MOTableRow;
+import org.snmp4j.agent.mo.*;
 import org.snmp4j.agent.mo.snmp.RowStatus;
 import org.snmp4j.agent.mo.snmp.SnmpCommunityMIB;
 import org.snmp4j.agent.mo.snmp.SnmpNotificationMIB;
@@ -58,6 +57,7 @@ public class SNMPAgent extends BaseAgent {
     private MOScalar evBrandModel, evVIN,  evMaxPower, evSpeed, evLocation, evKM;
     private MOScalar motorDescription, motorRPM, motorMaxPower;
     private MOScalar btryCapacity, btryChargeState, btryModuleCount, btryVoltage, btryCurrent;
+    private MOTable btryModulesTable;
 
     public SNMPAgent(String address, Simulator sim) throws IOException {
 
@@ -213,6 +213,7 @@ public class SNMPAgent extends BaseAgent {
         OID btryModuleCountOID = new OID(".1.3.6.1.4.1.12619.5.9.3.0");
         OID btryVoltageOID = new OID(".1.3.6.1.4.1.12619.5.9.4.0");
         OID btryCurrentOID = new OID(".1.3.6.1.4.1.12619.5.9.5.0");
+        OID btryModulesTableOID = new OID(".1.3.6.1.4.1.12619.5.9.6");
 
         //Inicializa Objetos da MIB
         evBrandModel = MOCreator.createReadOnly(evBrandModelOID, "Tesla Model Bruxao S");
@@ -259,6 +260,14 @@ public class SNMPAgent extends BaseAgent {
 
         btryModuleCount = MOCreator.createReadOnly(btryModuleCountOID, 10);
         this.registerManagedObject(btryModuleCount);
+
+        MOColumn colunas[];
+        colunas = new MOColumn[1];
+        colunas[1] = new MOColumn(1,1);
+      //  OID btryModulesTableIndexOID = new OID(".1.3.6.1.4.1.12619.5.9.6.1.1");
+        MOTableIndex indice = new MOTableIndex(new MOTableSubIndex[1]);
+//MOTableSubIndex(btryModulesTableIndexOID,1),
+        btryModulesTable =  MOCreator.createTable(btryModulesTableOID, indice, colunas);
 
         mibInitialized = true;
     }
