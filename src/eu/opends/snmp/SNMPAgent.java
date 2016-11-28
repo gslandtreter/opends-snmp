@@ -261,13 +261,38 @@ public class SNMPAgent extends BaseAgent {
         btryModuleCount = MOCreator.createReadOnly(btryModuleCountOID, 10);
         this.registerManagedObject(btryModuleCount);
 
-        MOColumn colunas[];
-        colunas = new MOColumn[1];
-        colunas[1] = new MOColumn(1,1);
+        MOTableBuilder builder = new MOTableBuilder(btryModulesTableOID)
+                .addColumnType(SMIConstants.SYNTAX_INTEGER,MOAccessImpl.ACCESS_READ_ONLY)//index
+                .addColumnType(SMIConstants.SYNTAX_INTEGER,MOAccessImpl.ACCESS_READ_ONLY)//capacity
+                .addColumnType(SMIConstants.SYNTAX_INTEGER,MOAccessImpl.ACCESS_READ_ONLY)//Imax
+                .addColumnType(SMIConstants.SYNTAX_GAUGE32,MOAccessImpl.ACCESS_READ_ONLY)//temperature
+                .addColumnType(SMIConstants.SYNTAX_GAUGE32,MOAccessImpl.ACCESS_READ_ONLY)//Voltage
+                .addColumnType(SMIConstants.SYNTAX_GAUGE32,MOAccessImpl.ACCESS_READ_ONLY)//ChargeState
+                .addColumnType(SMIConstants.SYNTAX_INTEGER,MOAccessImpl.ACCESS_READ_ONLY)//date
+                // Normally you would begin loop over you two domain objects here
+                .addRowValue(new Integer32(1))
+                .addRowValue(new Integer32(5))
+                .addRowValue(new Integer32(1500))
+                .addRowValue(new Gauge32(25))
+                .addRowValue(new Gauge32(370))
+                .addRowValue(new Gauge32(65))
+                .addRowValue(new Integer32(1500))
+                //next row
+                .addRowValue(new Integer32(2))
+                .addRowValue(new Integer32(5))
+                .addRowValue(new Integer32(1500))
+                .addRowValue(new Gauge32(25))
+                .addRowValue(new Gauge32(371))
+                .addRowValue(new Gauge32(65))
+                .addRowValue(new Integer32(1500));
+        this.registerManagedObject(builder.build());
+
+        //MOColumn colunas[];
+//        colunas[1] = new MOColumn(1,1);
       //  OID btryModulesTableIndexOID = new OID(".1.3.6.1.4.1.12619.5.9.6.1.1");
-        MOTableIndex indice = new MOTableIndex(new MOTableSubIndex[1]);
+      //  MOTableIndex indice = new MOTableIndex(new MOTableSubIndex[1]);
 //MOTableSubIndex(btryModulesTableIndexOID,1),
-        btryModulesTable =  MOCreator.createTable(btryModulesTableOID, indice, colunas);
+       // btryModulesTable =  MOCreator.createTable(btryModulesTableOID, indice, colunas);
 
         mibInitialized = true;
     }

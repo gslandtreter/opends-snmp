@@ -215,8 +215,13 @@ public class SteeringCar extends Car
 				// apply acceleration according to gas pedal state
 				pAccel = powerTrain.getPAccel(tpf, acceleratorPedalIntensity); //* 30f; usando tpf no getPAccel
 			}
-			transmission.performAcceleration(pAccel);
-
+			float pLoad = powerTrain.getPLoad(tpf);
+			float pTotal = -Math.max(0f, pAccel-pLoad);
+			float force = powerTrain.getForce(pTotal, tpf);
+			transmission.performAcceleration(force);
+			System.out.println("Load: " + pLoad + "  Engine: " + pAccel + "  Total: " + pTotal + "  Force: " + force);
+			//float currentFriction = powerTrain.getFrictionCoefficient() * maxFreeWheelBrakeForce;
+			//carControl.brake(powerTrain.getPLoad(tpf) + currentFriction);
 		}
 
 		// lights
