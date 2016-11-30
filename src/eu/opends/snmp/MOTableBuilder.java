@@ -89,9 +89,9 @@ public class MOTableBuilder {
     }
 
     public MOTable build() {
-        DefaultMOTable ifTable = new DefaultMOTable(tableRootOid, indexDef,
+        DefaultMOTable newTable = new DefaultMOTable(tableRootOid, indexDef,
                 columns.toArray(new MOColumn[0]));
-        MOMutableTableModel model = (MOMutableTableModel) ifTable.getModel();
+        MOMutableTableModel model = (MOMutableTableModel) newTable.getModel();
         int i = 1;
 
         for (Variable[] variables : tableRows) {
@@ -99,7 +99,7 @@ public class MOTableBuilder {
                     variables));
             i++;
         }
-        ifTable.setVolatile(true);
-        return ifTable;
+        newTable.setVolatile(true);
+        return newTable;
     }
 }

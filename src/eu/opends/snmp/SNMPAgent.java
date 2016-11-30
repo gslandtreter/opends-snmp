@@ -285,7 +285,8 @@ public class SNMPAgent extends BaseAgent {
                 .addRowValue(new Gauge32(371))
                 .addRowValue(new Gauge32(65))
                 .addRowValue(new Integer32(1500));
-        this.registerManagedObject(builder.build());
+        btryModulesTable = builder.build();
+        this.registerManagedObject(btryModulesTable);
 
         //MOColumn colunas[];
 //        colunas[1] = new MOColumn(1,1);
@@ -307,6 +308,11 @@ public class SNMPAgent extends BaseAgent {
 
         Float fV = sim.getCar().getVoltage();
         btryVoltage.setValue(new Gauge32(fV.longValue()));
+
+        for(int i=0; i< btryModulesTable.getColumnCount(); i++){
+            //btryModulesTable.getColumn(i).; //.setValue(); ;
+        }
+
 
         Float fI = sim.getCar().getCurrent();
         btryCurrent.setValue(new Gauge32(fI.longValue()));
