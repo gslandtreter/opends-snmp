@@ -282,7 +282,7 @@ public class PowerTrain
 		
 		// amount of fuel burned in current frame (in g == kJ/s * s * g/kJ)
 		float nettoFuelInGrams = PEngine * deltaT / lowerHeatValue;
-		float netWh = nettoFuelInGrams/760f * 174f;
+		float netWh;
 		
 		// regard additional injection of fuel to cool engine
 		// linear fuel usage factor: value between 1 (for RPM <= 3600) and 1.5 (for RPM >= 4800) 
@@ -294,9 +294,9 @@ public class PowerTrain
 		// if engine is idle (no fuel consumption, declutched and engine on)
 		if(isIdleEngine(fuelInLiters)) {
 			fuelInLiters = getIdleFuelConsumption(deltaT);
-			netWh = 0;
 		}
 
+		netWh = 0.3f * deltaT * resultingPower /3.6f;
 		totalFuelConsumption += fuelInLiters;
 		totalWhConsumption += netWh;
 		

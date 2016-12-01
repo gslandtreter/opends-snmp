@@ -763,12 +763,12 @@ public abstract class Car
 	}
 
 	public float getVoltage(){
-		float voltage = 290 + 90*(BATTERYWh - getPowerTrain().getTotalWhConsumption())/BATTERYWh;
+		float voltage = 300 + 103*(BATTERYWh - getPowerTrain().getTotalWhConsumption())/BATTERYWh;
 		return voltage;
 	}
 
 	public float getCurrent(){
-		float current = getPowerTrain().getInstantPower()/getVoltage();
+		float current = 1000f * getPowerTrain().getInstantPower()/getVoltage();
 		return current;
 	}
 

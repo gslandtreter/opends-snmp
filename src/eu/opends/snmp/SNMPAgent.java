@@ -258,7 +258,7 @@ public class SNMPAgent extends BaseAgent {
         btryCurrent = MOCreator.createReadOnly(btryCurrentOID, 0);
         this.registerManagedObject(btryCurrent);
 
-        btryModuleCount = MOCreator.createReadOnly(btryModuleCountOID, 10);
+        btryModuleCount = MOCreator.createReadOnly(btryModuleCountOID, 16);
         this.registerManagedObject(btryModuleCount);
 
         MOTableBuilder builder = new MOTableBuilder(btryModulesTableOID)
@@ -308,6 +308,8 @@ public class SNMPAgent extends BaseAgent {
 
         Float fV = sim.getCar().getVoltage();
         btryVoltage.setValue(new Gauge32(fV.longValue()));
+
+        btryModuleCount.setValue(new Integer32(16));
 
         for(int i=0; i< btryModulesTable.getColumnCount(); i++){
             //btryModulesTable.getColumn(i).; //.setValue(); ;
