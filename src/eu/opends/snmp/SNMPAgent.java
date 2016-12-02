@@ -17,6 +17,8 @@ import java.net.Socket;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.snmp4j.TransportMapping;
 import org.snmp4j.agent.BaseAgent;
@@ -58,6 +60,8 @@ public class SNMPAgent extends BaseAgent {
     private MOScalar motorDescription, motorRPM, motorMaxPower;
     private MOScalar btryCapacity, btryChargeState, btryModuleCount, btryVoltage, btryCurrent;
     private MOTable btryModulesTable;
+
+    private MOTableBuilder builder;
 
     public SNMPAgent(String address, Simulator sim) throws IOException {
 
@@ -241,7 +245,7 @@ public class SNMPAgent extends BaseAgent {
         motorRPM = MOCreator.createReadOnly(motorRPMOID, 0.0f);
         this.registerManagedObject(motorRPM);
 
-        motorMaxPower = MOCreator.createReadOnly(motorMaxPowerOID, 1500);
+        motorMaxPower = MOCreator.createReadOnly(motorMaxPowerOID, 500);
         this.registerManagedObject(motorMaxPower);
 
 
@@ -261,30 +265,24 @@ public class SNMPAgent extends BaseAgent {
         btryModuleCount = MOCreator.createReadOnly(btryModuleCountOID, 16);
         this.registerManagedObject(btryModuleCount);
 
-        MOTableBuilder builder = new MOTableBuilder(btryModulesTableOID)
+        builder = new MOTableBuilder(btryModulesTableOID)
                 .addColumnType(SMIConstants.SYNTAX_INTEGER,MOAccessImpl.ACCESS_READ_ONLY)//index
                 .addColumnType(SMIConstants.SYNTAX_INTEGER,MOAccessImpl.ACCESS_READ_ONLY)//capacity
                 .addColumnType(SMIConstants.SYNTAX_INTEGER,MOAccessImpl.ACCESS_READ_ONLY)//Imax
                 .addColumnType(SMIConstants.SYNTAX_GAUGE32,MOAccessImpl.ACCESS_READ_ONLY)//temperature
                 .addColumnType(SMIConstants.SYNTAX_GAUGE32,MOAccessImpl.ACCESS_READ_ONLY)//Voltage
                 .addColumnType(SMIConstants.SYNTAX_GAUGE32,MOAccessImpl.ACCESS_READ_ONLY)//ChargeState
-                .addColumnType(SMIConstants.SYNTAX_INTEGER,MOAccessImpl.ACCESS_READ_ONLY)//date
-                // Normally you would begin loop over you two domain objects here
-                .addRowValue(new Integer32(1))
-                .addRowValue(new Integer32(5))
-                .addRowValue(new Integer32(1500))
-                .addRowValue(new Gauge32(25))
-                .addRowValue(new Gauge32(370))
-                .addRowValue(new Gauge32(65))
-                .addRowValue(new Integer32(1500))
-                //next row
-                .addRowValue(new Integer32(2))
-                .addRowValue(new Integer32(5))
-                .addRowValue(new Integer32(1500))
-                .addRowValue(new Gauge32(25))
-                .addRowValue(new Gauge32(371))
-                .addRowValue(new Gauge32(65))
-                .addRowValue(new Integer32(1500));
+                .addColumnType(SMIConstants.SYNTAX_OCTET_STRING,MOAccessImpl.ACCESS_READ_ONLY);//date
+                for (int i=1; i<17; i++){
+                    builder
+                        .addRowValue(new Integer32(i))
+                        .addRowValue(new Integer32(5625))  //Wh
+                        .addRowValue(new Integer32(1000))  //A
+                        .addRowValue(new Gauge32(25))       //ºC
+                        .addRowValue(new Gauge32(25200)) //em mV
+                        .addRowValue(new Gauge32(5625)) //em Wh
+                        .addRowValue(new OctetString("15/11/2015"));
+                }
         btryModulesTable = builder.build();
         this.registerManagedObject(btryModulesTable);
 
@@ -311,17 +309,40 @@ public class SNMPAgent extends BaseAgent {
 
         btryModuleCount.setValue(new Integer32(16));
 
-        for(int i=0; i< btryModulesTable.getColumnCount(); i++){
-            //btryModulesTable.getColumn(i).; //.setValue(); ;
+        List<Variable[]> tableRows = new ArrayList<Variable[]>();
+        for(int i=1; i<3; i++){
+            MOTableRow row;
+            OID rowOID = new OID(String.valueOf(i));
+            row = btryModulesTable.removeRow(rowOID);
+
+            tableRows.add(new Variable[btryModulesTable.getColumnCount()]);
+            tableRows.get(i-1)[0] = new Integer32(i);
+            tableRows.get(i-1)[1] = new Integer32(5625);  //Wh
+            tableRows.get(i-1)[2] = new Integer32(1000);  //A
+            tableRows.get(i-1)[3] = new Gauge32(25);       //ºC
+            tableRows.get(i-1)[4] = new Gauge32((long)(1000*fV/16)); //em mV
+            tableRows.get(i-1)[5] = new Gauge32((long)(fBattery/16)); //em Wh
+            tableRows.get(i-1)[6] = new OctetString("15/11/2015");
+
+            MOMutableTableModel model = (MOMutableTableModel) btryModulesTable.getModel();
+
+            for (Variable[] variables : tableRows) {
+                model.addRow(new DefaultMOMutableRow2PC(new OID(String.valueOf(i)),
+                        variables));
+                i++;
+            }
+            
+            //btryModulesTable.addNewRow(rowOID, variables);
+            //btryModulesTable.createRow(rowOID,variables);
         }
 
+        //btryModulesTable.setValue();
 
         Float fI = sim.getCar().getCurrent();
         btryCurrent.setValue(new Gauge32(fI.longValue()));
         //}
         //catch(Exception ex)
         //{
-
         //}
         Float fSpeed = sim.getCar().getCurrentSpeedKmh();
         evSpeed.setValue(new Gauge32(fSpeed.longValue()));
