@@ -62,6 +62,7 @@ public class SNMPAgent extends BaseAgent {
     private MOTable btryModulesTable;
 
     private MOTableBuilder builder;
+    List<Variable[]> tableRows = new ArrayList<Variable[]>();
 
     public SNMPAgent(String address, Simulator sim) throws IOException {
 
@@ -309,8 +310,7 @@ public class SNMPAgent extends BaseAgent {
 
         btryModuleCount.setValue(new Integer32(16));
 
-        List<Variable[]> tableRows = new ArrayList<Variable[]>();
-        for(int i=1; i<3; i++){
+        for(int i=1; i<16; i++){
             MOTableRow row;
             OID rowOID = new OID(String.valueOf(i));
             row = btryModulesTable.removeRow(rowOID);
@@ -326,17 +326,16 @@ public class SNMPAgent extends BaseAgent {
 
             MOMutableTableModel model = (MOMutableTableModel) btryModulesTable.getModel();
 
+            int j = 1;
             for (Variable[] variables : tableRows) {
-                model.addRow(new DefaultMOMutableRow2PC(new OID(String.valueOf(i)),
+                model.addRow(new DefaultMOMutableRow2PC(new OID(String.valueOf(j)),
                         variables));
-                i++;
+                j++;
             }
-            
+
             //btryModulesTable.addNewRow(rowOID, variables);
             //btryModulesTable.createRow(rowOID,variables);
         }
-
-        //btryModulesTable.setValue();
 
         Float fI = sim.getCar().getCurrent();
         btryCurrent.setValue(new Gauge32(fI.longValue()));
