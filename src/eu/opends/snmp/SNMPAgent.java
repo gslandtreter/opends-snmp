@@ -61,9 +61,6 @@ public class SNMPAgent extends BaseAgent {
     private MOScalar btryCapacity, btryChargeState, btryModuleCount, btryVoltage, btryCurrent;
     private MOTable btryModulesTable;
 
-    private MOTableBuilder builder;
-    List<Variable[]> tableRows = new ArrayList<Variable[]>();
-
     public SNMPAgent(String address, Simulator sim) throws IOException {
 
         /**
@@ -266,7 +263,7 @@ public class SNMPAgent extends BaseAgent {
         btryModuleCount = MOCreator.createReadOnly(btryModuleCountOID, 16);
         this.registerManagedObject(btryModuleCount);
 
-        builder = new MOTableBuilder(btryModulesTableOID)
+        MOTableBuilder builder = new MOTableBuilder(btryModulesTableOID)
                 .addColumnType(SMIConstants.SYNTAX_INTEGER,MOAccessImpl.ACCESS_READ_ONLY)//index
                 .addColumnType(SMIConstants.SYNTAX_INTEGER,MOAccessImpl.ACCESS_READ_ONLY)//capacity
                 .addColumnType(SMIConstants.SYNTAX_INTEGER,MOAccessImpl.ACCESS_READ_ONLY)//Imax
@@ -301,7 +298,7 @@ public class SNMPAgent extends BaseAgent {
 
         if(!mibInitialized)
             return;
-        //try {
+
         Float fBattery = sim.getCar().getWhLeft();
         btryChargeState.setValue(new Gauge32(fBattery.longValue()));
 
@@ -310,7 +307,8 @@ public class SNMPAgent extends BaseAgent {
 
         btryModuleCount.setValue(new Integer32(16));
 
-        for(int i=1; i<16; i++){
+        List<Variable[]> tableRows = new ArrayList<Variable[]>();
+        for(int i=1; i<17; i++){
             MOTableRow row;
             OID rowOID = new OID(String.valueOf(i));
             row = btryModulesTable.removeRow(rowOID);
@@ -332,17 +330,13 @@ public class SNMPAgent extends BaseAgent {
                         variables));
                 j++;
             }
-
             //btryModulesTable.addNewRow(rowOID, variables);
             //btryModulesTable.createRow(rowOID,variables);
         }
 
         Float fI = sim.getCar().getCurrent();
         btryCurrent.setValue(new Gauge32(fI.longValue()));
-        //}
-        //catch(Exception ex)
-        //{
-        //}
+
         Float fSpeed = sim.getCar().getCurrentSpeedKmh();
         evSpeed.setValue(new Gauge32(fSpeed.longValue()));
 
@@ -351,11 +345,6 @@ public class SNMPAgent extends BaseAgent {
 
         Float fMileage = sim.getCar().getMileage() / 1000.0f;
         evKM.setValue(new OctetString(fMileage.toString()));
-
-
-        //int iCapacity = 90000;//sim.getCar().getMileage() / 1000.0f;
-        //btryCapacity.setValue(new Integer32(iCapacity));
-
     }
 
 }
