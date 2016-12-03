@@ -25,16 +25,6 @@ public class MOCreator {
                 getVariable(value));
     }
 
-    public static MOTable createTable(org.snmp4j.smi.OID oid,
-                                      MOTableIndex indexDef,
-                                      MOColumn[] columns){
-        MOCreator moCreator = new MOCreator();
-        MOTable newTable = moCreator.createTable(oid, indexDef, columns);
-
-        return newTable;
-    }
-
-
     private  static Variable getVariable(Object value) {
         if(value instanceof String) {
             return new OctetString((String)value);

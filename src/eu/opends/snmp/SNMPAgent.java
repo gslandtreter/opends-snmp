@@ -216,6 +216,7 @@ public class SNMPAgent extends BaseAgent {
         OID btryVoltageOID = new OID(".1.3.6.1.4.1.12619.5.9.4.0");
         OID btryCurrentOID = new OID(".1.3.6.1.4.1.12619.5.9.5.0");
         OID btryModulesTableOID = new OID(".1.3.6.1.4.1.12619.5.9.6");
+        OID btryModulesTableEntryOID = new OID(".1.3.6.1.4.1.12619.5.9.6.1");
 
         //Inicializa Objetos da MIB
         evBrandModel = MOCreator.createReadOnly(evBrandModelOID, "Tesla Model Bruxao S");
@@ -263,7 +264,7 @@ public class SNMPAgent extends BaseAgent {
         btryModuleCount = MOCreator.createReadOnly(btryModuleCountOID, 16);
         this.registerManagedObject(btryModuleCount);
 
-        MOTableBuilder builder = new MOTableBuilder(btryModulesTableOID)
+        MOTableBuilder builder = new MOTableBuilder(btryModulesTableEntryOID)
                 .addColumnType(SMIConstants.SYNTAX_INTEGER,MOAccessImpl.ACCESS_READ_ONLY)//index
                 .addColumnType(SMIConstants.SYNTAX_INTEGER,MOAccessImpl.ACCESS_READ_ONLY)//capacity
                 .addColumnType(SMIConstants.SYNTAX_INTEGER,MOAccessImpl.ACCESS_READ_ONLY)//Imax
@@ -283,13 +284,6 @@ public class SNMPAgent extends BaseAgent {
                 }
         btryModulesTable = builder.build();
         this.registerManagedObject(btryModulesTable);
-
-        //MOColumn colunas[];
-//        colunas[1] = new MOColumn(1,1);
-      //  OID btryModulesTableIndexOID = new OID(".1.3.6.1.4.1.12619.5.9.6.1.1");
-      //  MOTableIndex indice = new MOTableIndex(new MOTableSubIndex[1]);
-//MOTableSubIndex(btryModulesTableIndexOID,1),
-       // btryModulesTable =  MOCreator.createTable(btryModulesTableOID, indice, colunas);
 
         mibInitialized = true;
     }
@@ -324,6 +318,7 @@ public class SNMPAgent extends BaseAgent {
 
             MOMutableTableModel model = (MOMutableTableModel) btryModulesTable.getModel();
 
+            //model.getRow("").
             int j = 1;
             for (Variable[] variables : tableRows) {
                 model.addRow(new DefaultMOMutableRow2PC(new OID(String.valueOf(j)),
