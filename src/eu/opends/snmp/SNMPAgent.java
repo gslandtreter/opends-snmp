@@ -307,13 +307,15 @@ public class SNMPAgent extends BaseAgent {
             OID rowOID = new OID(String.valueOf(i));
             row = btryModulesTable.removeRow(rowOID);
 
+            int prettyRandom = 9 + (int) (Math.random() * 20);
+
             tableRows.add(new Variable[btryModulesTable.getColumnCount()]);
             tableRows.get(i-1)[0] = new Integer32(i);
             tableRows.get(i-1)[1] = new Integer32(5625);  //Wh
             tableRows.get(i-1)[2] = new Integer32(1000);  //A
             tableRows.get(i-1)[3] = new Gauge32(25);       //ºC
-            tableRows.get(i-1)[4] = new Gauge32((long)(1000*fV/16)); //em mV
-            tableRows.get(i-1)[5] = new Gauge32((long)(fBattery/16)); //em Wh
+            tableRows.get(i-1)[4] = new Gauge32((long)(1000*fV/16) + prettyRandom); //em mV
+            tableRows.get(i-1)[5] = new Gauge32((long)(fBattery/16)+ prettyRandom); //em Wh
             tableRows.get(i-1)[6] = new OctetString("15/11/2015");
 
             MOMutableTableModel model = (MOMutableTableModel) btryModulesTable.getModel();

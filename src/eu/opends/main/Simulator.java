@@ -454,7 +454,7 @@ public class Simulator extends SimulationBasics
 		// Inicializa o SNMP
 		/////////////////////////////////////////
 		try {
-			snmpAgent = new SNMPAgent("0.0.0.0/2001", this);
+			snmpAgent = new SNMPAgent("0.0.0.0/161", this);
 			snmpAgent.start();
 		}
 		catch(Exception e) {
