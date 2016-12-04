@@ -219,13 +219,13 @@ public class SNMPAgent extends BaseAgent {
         OID btryModulesTableEntryOID = new OID(".1.3.6.1.4.1.12619.5.9.6.1");
 
         //Inicializa Objetos da MIB
-        evBrandModel = MOCreator.createReadOnly(evBrandModelOID, "Tesla Model Bruxao S");
+        evBrandModel = MOCreator.createReadOnly(evBrandModelOID, "Model S 90");
         this.registerManagedObject(evBrandModel);
 
         evVIN = MOCreator.createReadOnly(evVINOID, "1234567890");
         this.registerManagedObject(evVIN);
 
-        evMaxPower = MOCreator.createReadOnly(evMaxPowerOID, "1000");
+        evMaxPower = MOCreator.createReadOnly(evMaxPowerOID, "300000");
         this.registerManagedObject(evMaxPower);
 
         evSpeed = MOCreator.createReadOnly(evSpeedOID, 0.0f);
@@ -238,13 +238,13 @@ public class SNMPAgent extends BaseAgent {
         this.registerManagedObject(evKM);
 
 
-        motorDescription = MOCreator.createReadOnly(motorDescriptionOID, "Sem duvida eh um motor eletrico");
+        motorDescription = MOCreator.createReadOnly(motorDescriptionOID, "3-phase AC induction motor");
         this.registerManagedObject(motorDescription);
 
         motorRPM = MOCreator.createReadOnly(motorRPMOID, 0.0f);
         this.registerManagedObject(motorRPM);
 
-        motorMaxPower = MOCreator.createReadOnly(motorMaxPowerOID, 500);
+        motorMaxPower = MOCreator.createReadOnly(motorMaxPowerOID, 300000);
         this.registerManagedObject(motorMaxPower);
 
 
@@ -343,5 +343,4 @@ public class SNMPAgent extends BaseAgent {
         Float fMileage = sim.getCar().getMileage() / 1000.0f;
         evKM.setValue(new OctetString(fMileage.toString()));
     }
-
 }
