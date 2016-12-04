@@ -38,9 +38,11 @@ package eu.opends.snmp;
 
 public class MOTableBuilder {
 
-    private MOTableSubIndex[] subIndexes = new MOTableSubIndex[] { new MOTableSubIndex(
-            SMIConstants.SYNTAX_INTEGER) };
-    private MOTableIndex indexDef = new MOTableIndex(subIndexes, false);
+    private MOTableSubIndex[] subIndexes = new MOTableSubIndex[] {
+            new MOTableSubIndex(new OID(".1.3.6.1.4.1.12619.5.9.6.1.1"), SMIConstants.SYNTAX_INTEGER)
+    };
+    //private MOTableSubIndex[] subIndexes = new MOTableSubIndex[] { new MOTableSubIndex(SMIConstants.SYNTAX_INTEGER) };
+    private MOTableIndex indexDef = new MOTableIndex(subIndexes,true);//false);
 
     private final List<MOColumn> columns = new ArrayList<MOColumn>();
     private final List<Variable[]> tableRows = new ArrayList<Variable[]>();
