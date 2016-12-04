@@ -194,10 +194,6 @@ public class SNMPAgent extends BaseAgent {
 
     private void initializeMIB() {
 
-        //OID sysDescr = new OID(".1.3.6.1.2.1.1.1.0");
-        //this.unregisterManagedObject(this.getSnmpv2MIB());
-        //this.registerManagedObject(MOCreator.createReadOnly(sysDescr,"EH NOIS Q VOA BRUSHAUM"));
-
         //Inicializa OIDs de acordo com a MIB
         OID evBrandModelOID = new OID(".1.3.6.1.4.1.12619.5.1.0");
         OID evVINOID = new OID(".1.3.6.1.4.1.12619.5.2.0");
